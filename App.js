@@ -8,19 +8,30 @@
 
 import React from 'react';
 import {StyleSheet} from 'react-native';
-
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 
 import HomeScreen from './src/screens/HomeScreen/HomeScreen';
-// const Stack = createStackNavigator();
-const App = () => {
-  return <HomeScreen />;
+
+const Stack = createStackNavigator();
+
+const HomeStackNavigator = () => {
+	return (
+		<Stack.Navigator
+			initialRouteName="Home"
+			headerMode="none"
+		>
+			<Stack.Screen name="Home" component={HomeScreen} />
+		</Stack.Navigator>
+	);
 };
-// const AppNavigator = createStackNavigator({
-//   Home: {
-//     screen: HomeScreen,
-//   }
-// });
-// const AppContainer = createAppContainer(AppNavigator);
+
+const App = () => {
+  	return (<NavigationContainer>
+		<HomeStackNavigator />
+	</NavigationContainer>);
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
