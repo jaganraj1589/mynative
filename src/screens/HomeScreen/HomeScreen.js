@@ -1,111 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import styles from './style.js';
 import {Text, View, StyleSheet, Dimensions, Image, Linking} from 'react-native';
-import axios from 'react-native-axios';
-import {
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native-gesture-handler';
+import {Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import AppHeader from '../../components/header';
 import PlayBtn from '../../components/playbtn';
-const {height, width} = Dimensions.get('window');
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHeart} from '@fortawesome/free-regular-svg-icons';
 import AppFilter from '../../components/sort';
-
-const image = {uri: 'https://reactjs.org/logo-og.png'};
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    user: 'jagan1589',
-    userImage: 'https://reactjs.org/logo-og.png',
-    postedtime: '8 mins ago',
-    followed: true,
-    followers: 18,
-    linktext: 'google',
-    link: 'https://reactjs.org/logo-og.png',
-    liked: true,
-    likes: 20,
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    user: 'jagan1589',
-    userImage: 'https://reactjs.org/logo-og.png',
-    postedtime: '8 mins ago',
-    followed: true,
-    followers: 18,
-    linktext: 'google',
-    link: 'https://reactjs.org/logo-og.png',
-    liked: true,
-    likes: 20,
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    user: 'jagan1589',
-    userImage: 'https://reactjs.org/logo-og.png',
-    postedtime: '8 mins ago',
-    followed: true,
-    followers: 18,
-    linktext: 'google',
-    link: 'https://reactjs.org/logo-og.png',
-    liked: true,
-    likes: 20,
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    user: 'jagan1589',
-    userImage: 'https://reactjs.org/logo-og.png',
-    postedtime: '8 mins ago',
-    followed: true,
-    followers: 18,
-    linktext: 'google',
-    link: 'https://reactjs.org/logo-og.png',
-    liked: true,
-    likes: 20,
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    user: 'jagan1589',
-    userImage: 'https://reactjs.org/logo-og.png',
-    postedtime: '8 mins ago',
-    followed: true,
-    followers: 18,
-    linktext: 'google',
-    link: 'https://reactjs.org/logo-og.png',
-    liked: true,
-    likes: 20,
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    user: 'jagan1589',
-    userImage: 'https://reactjs.org/logo-og.png',
-    postedtime: '8 mins ago',
-    followed: true,
-    followers: 18,
-    linktext: 'google',
-    link: 'https://reactjs.org/logo-og.png',
-    liked: true,
-    likes: 20,
-  },
-];
+import PopUp from '../../components/popup';
+import LoginPopUp from '../../components/loginpop';
 
 const HomeScreen = () => {
-  // axios
-  //   .post(
-  //     'https://chit-chat-audio-micro-blogging-staging.eu-staging.kacdn.net/api/feed/list',
-  //   )
-  //   .then(function(response) {
-  //     alert(response);
-  //   })
-  //   .catch(function(error) {
-  //     console.log(error);
-  //   });
+  const [record, setRecord] = useState(null);
+  const [login, setLogin] = useState(null);
+  const recordOn = e => {
+    setRecord(true);
+  };
+
   return (
     <>
       <View style={styles.container}>
-        <AppHeader />
+        <AppHeader setLogin={setLogin} />
         <ScrollView style={styles.feedContainer}>
           <View style={styles.cardCover}>
             <View style={styles.card}>
@@ -242,6 +159,16 @@ const HomeScreen = () => {
             </View>
           </View>
         </ScrollView>
+        <View style={styles.recording}>
+          <Button
+            type="solid"
+            buttonStyle={styles.recordBtn}
+            onPress={recordOn}
+            icon={<Icon name="microphone-alt" size={50} color="#fff" />}
+          />
+        </View>
+        {login ? <LoginPopUp setLogin={setLogin}/> : null}
+        {record ? <PopUp setRecord={setRecord} /> : null}
         <AppFilter />
       </View>
     </>
@@ -254,7 +181,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Bold',
+  },
+  recordBtn: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    backgroundColor: '#eb3434',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#fff',
+    borderWidth: 5,
+  },
+  recording: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 25,
+    zIndex: 1,
+    shadowColor: '#000',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.8,
+    shadowRadius: 50,
+    elevation: 10,
   },
   rowFlex: {
     flex: 1,
@@ -296,9 +250,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
+    width: 40,
+    height: 40,
+    borderRadius: 40,
     marginRight: 10,
   },
   userNameBlock: {
@@ -310,10 +264,13 @@ const styles = StyleSheet.create({
   },
   followBtn: {
     backgroundColor: '#fb9f1d',
-    padding: 5,
+    padding: 3,
     color: '#fff',
     borderRadius: 5,
     width: 100,
+    marginTop: 5,
+    fontFamily: 'Roboto',
+    fontSize: 12,
   },
   followBlock: {
     width: '40%',
