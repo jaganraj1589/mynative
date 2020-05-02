@@ -2,13 +2,13 @@ import React from 'react';
 import {Text, View, StyleSheet, Dimensions, Image} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPodcast} from '@fortawesome/free-solid-svg-icons';
-import {faUser} from '@fortawesome/free-regular-svg-icons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
+import {Button} from 'react-native-elements';
 
-const AppHeader = ({ navigation, showProfile }) => {
-
+const AppHeader = ({navigation, showProfile, setLogin}) => {
   const toProfile = () => {
-    navigation.navigate("profile");
+    navigation.navigate('profile');
   };
 
   return (
@@ -19,15 +19,22 @@ const AppHeader = ({ navigation, showProfile }) => {
         <FontAwesomeIcon icon={faPodcast} color={'#feb44b'} size={50} />
         <Text style={styles.logoText}>BADS</Text>
       </View>
-      {showProfile && (<View>
-        <FontAwesomeIcon icon={faUser} color={'#fff'} size={24} onPress={toProfile} />
-      </View>)}
+      {showProfile && (
+        <View>
+          <Button
+            type="solid"
+            buttonStyle={styles.loginBtn}
+            onPress={e => setLogin(true)}
+            icon={<Icon name="user" size={30} color="#fff" />}
+          />
+        </View>
+      )}
     </LinearGradient>
   );
 };
 
 AppHeader.defaultProps = {
-  showProfile: false
+  showProfile: false,
 };
 
 const styles = StyleSheet.create({
@@ -51,6 +58,11 @@ const styles = StyleSheet.create({
   logoText: {
     color: '#fff',
     fontSize: 22,
+  },
+  loginBtn: {
+    color: '#fff',
+    fontSize: 16,
+    backgroundColor: 'transparent',
   },
 });
 export default AppHeader;
