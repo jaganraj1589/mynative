@@ -1,13 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {Text, View, Image, Linking, TouchableOpacity} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHeart} from '@fortawesome/free-regular-svg-icons';
+import {faHeart as faFilledHeart} from '@fortawesome/free-solid-svg-icons';
 
 import AudioPlayer from '../../components/AudioPlayer';
 import styles from './style.js';
+import { feedAction } from '../../services/feeds';
+import { userAction } from '../../services/users';
 
 const Feed = ({ feed }) => {
-	console.info(feed);
+	
+	const [ feedState, setFeedState ] = useState({
+		likes: feed.likes,
+		isLiked: feed.isLiked,
+		isFollowed: feed.isFollowed,
+		followers: feed.followers
+	});
+
+	const likeUnlike = () => {
+		if (feedState.isLiked === 1) {
+			setFeedState(prevState => ({...prevState, isLiked: 0, likes: prevState.likes - 1}));
+		} else {
+			setFeedState(prevState => ({...prevState, isLiked: 1, likes: prevState.likes + 1}));
+		}
+		feedAction({ feedId: feed._id, action: feedState.isLiked ? 0 : 1 })
+		.then(() => {
+			
+		})
+		.catch((response) => {
+			console.error(response.body);
+		});
+	};
+
+	const followUnFollow = () => {
+		if (feedState.isFollowed === 1) {
+			setFeedState(prevState => ({...prevState, isFollowed: 0, followers: prevState.followers - 1}));
+		} else {
+			setFeedState(prevState => ({...prevState, isFollowed: 1, followers: prevState.followers + 1}));
+		}
+		userAction ({ followerId: feed.speakerId, action: feedState.isFollowed ? 0 : 1 })
+		.then(() => {
+			
+		})
+		.catch(({ response }) => {
+			console.info(response);
+		});
+	};
+
+	useEffect(() => {
+		console.info(feedState);
+	}, [feedState]);
+
 	return (<View style={styles.card}>
 	  <View style={styles.topRow}>
 	    <View style={styles.userNameBlock}>
@@ -23,11 +67,14 @@ const Feed = ({ feed }) => {
 	    </View>
 	    <View style={styles.followBlock}>
 	      <Text style={{textAlign: 'center', width: 100, fontSize: 14}}>
-	        {feed.followers} Followers
+	        {feedState.followers} Followers
 	      </Text>
-	      <TouchableOpacity style={styles.followBtn}>
+	      <TouchableOpacity
+	      	style={styles.followBtn}
+	      	onPress={followUnFollow}
+	      >
 	        <Text style={{color: '#fff', textAlign: 'center'}}>
-	          Follow
+	          { feedState.isFollowed ? "Unfollow" : "Follow" }
 	        </Text>
 	      </TouchableOpacity>
 	    </View>
@@ -47,8 +94,12 @@ const Feed = ({ feed }) => {
 	    <AudioPlayer uri={feed.audio} />
 
 	    <View style={styles.likes}>
-	      <Text>{ feed.likes } likes</Text>
-	      <FontAwesomeIcon icon={faHeart} color={'#eb3434'} />
+	      <Text>{ feedState.likes } likes</Text>
+	      <FontAwesomeIcon
+	      	icon={feedState.isLiked ? faFilledHeart : faHeart }
+	      	color={'#eb3434'}
+	      	onPress={likeUnlike}
+	      />
 	    </View>
 	  </View>
 	</View>);

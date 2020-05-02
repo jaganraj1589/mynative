@@ -7,11 +7,13 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
+import AppHeader from '../../components/header';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   return (
     <View>
-      <Text>dsdsd</Text>
+      <AppHeader navigation={navigation} />
+      
     </View>
   );
 };

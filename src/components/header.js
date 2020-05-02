@@ -5,7 +5,12 @@ import {faPodcast} from '@fortawesome/free-solid-svg-icons';
 import {faUser} from '@fortawesome/free-regular-svg-icons';
 import LinearGradient from 'react-native-linear-gradient';
 
-const AppHeader = () => {
+const AppHeader = ({ navigation, showProfile }) => {
+
+  const toProfile = () => {
+    navigation.navigate("profile");
+  };
+
   return (
     <LinearGradient
       style={styles.header}
@@ -14,12 +19,17 @@ const AppHeader = () => {
         <FontAwesomeIcon icon={faPodcast} color={'#feb44b'} size={50} />
         <Text style={styles.logoText}>BADS</Text>
       </View>
-      <View>
-        <FontAwesomeIcon icon={faUser} color={'#fff'} size={24} />
-      </View>
+      {showProfile && (<View>
+        <FontAwesomeIcon icon={faUser} color={'#fff'} size={24} onPress={toProfile} />
+      </View>)}
     </LinearGradient>
   );
 };
+
+AppHeader.defaultProps = {
+  showProfile: false
+};
+
 const styles = StyleSheet.create({
   header: {
     display: 'flex',

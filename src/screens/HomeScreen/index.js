@@ -34,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   return (<View style={styles.container}>
-        <AppHeader navigation={navigation} />
+        <AppHeader navigation={navigation} showProfile />
         <ScrollView style={styles.feedContainer}>
           <View style={styles.cardCover}>
             <FlatList

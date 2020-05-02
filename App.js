@@ -11,17 +11,19 @@ import {StyleSheet} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import HomeScreen from './src/screens/HomeScreen/HomeScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
 const HomeStackNavigator = () => {
 	return (
 		<Stack.Navigator
-			initialRouteName="Home"
+			initialRouteName="home"
 			headerMode="none"
 		>
 			<Stack.Screen name="Home" component={HomeScreen} />
+			<Stack.Screen name="profile" component={ProfileScreen} />
 		</Stack.Navigator>
 	);
 };
