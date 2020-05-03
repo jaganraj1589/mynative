@@ -8,6 +8,8 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlay, faPause} from '@fortawesome/free-solid-svg-icons';
 import Player from './playeranimation';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View} from 'react-native';
 
 const AudioPlayer = ({uri, audioduration}) => {
   let playbackInstance;
@@ -60,7 +62,9 @@ const AudioPlayer = ({uri, audioduration}) => {
   const destroy = async () => {
     await TrackPlayer.destroy();
   };
-
+  useEffect(() => {
+    setDone(0);
+  }, [setDone]);
   useEffect(() => {
     configureAudio();
     return destroy;
@@ -68,21 +72,22 @@ const AudioPlayer = ({uri, audioduration}) => {
 
   return (
     <>
-      <Player
-        activeColor="#eb3434"
-        passiveColor="#ccc"
-        baseColor="white"
-        width={5}
-        done={done}
-        radius={25}
-        duration={audioduration}>
-        <FontAwesomeIcon
-          icon={playerState.isPlaying ? faPause : faPlay}
-          size={15}
-          color={playerState.isPlaying ? '#eb3434' : '#ccc'}
-          onPress={handlePlayBack}
-        />
-      </Player>
+      <View onStartShouldSetResponder={handlePlayBack}>
+        <Player
+          activeColor="#eb3434"
+          passiveColor="#ccc"
+          baseColor="white"
+          width={5}
+          done={done ? done : 0}
+          radius={25}
+          duration={audioduration}>
+          <FontAwesomeIcon
+            icon={playerState.isPlaying ? faPause : faPlay}
+            size={15}
+            color={playerState.isPlaying ? '#eb3434' : '#ccc'}
+          />
+        </Player>
+      </View>
     </>
   );
 };

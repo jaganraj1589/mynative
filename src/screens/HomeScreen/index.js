@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Dimensions, Image, Linking, AsyncStorage} from 'react-native';
+import {
+  Text,
+  View,
+  Dimensions,
+  Image,
+  Linking,
+  AsyncStorage,
+} from 'react-native';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'react-native-axios';
@@ -16,6 +23,7 @@ import Feed from './Feed';
 import {getFeeds} from '../../services/feeds';
 import LoginPopUp from '../../components/loginpop';
 import PopUp from '../../components/popup';
+import Feedfilter from '../../components/filter';
 
 const image = {uri: 'https://reactjs.org/logo-og.png'};
 
@@ -24,6 +32,7 @@ const HomeScreen = ({navigation}) => {
   const [record, setRecord] = useState(false);
   const [canRecord, setCanRecord] = useState(false);
   const [login, setLogin] = useState(false);
+  const [filter, setFilter] = useState(false);
   const recordOn = e => {
     setRecord(true);
   };
@@ -41,7 +50,7 @@ const HomeScreen = ({navigation}) => {
   const canShowFeed = async () => {
     const userType = await AsyncStorage.getItem('userType');
     console.info(userType);
-    if (userType === "receiver") {
+    if (userType === 'receiver') {
       setCanRecord(true);
     }
   };
@@ -57,7 +66,12 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} fetchAllFeeds={fetchAllFeeds} showProfile setLogin={setLogin} />
+      <AppHeader
+        navigation={navigation}
+        fetchAllFeeds={fetchAllFeeds}
+        showProfile
+        setLogin={setLogin}
+      />
       <ScrollView style={styles.feedContainer}>
         <View style={styles.cardCover}>
           <FlatList
@@ -67,17 +81,20 @@ const HomeScreen = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      { canRecord && (<View style={styles.recording}>
-        <Button
-          type="solid"
-          buttonStyle={styles.recordBtn}
-          onPress={recordOn}
-          icon={<Icon name="microphone-alt" size={50} color="#fff" />}
-        />
-      </View>) }
+      {canRecord && (
+        <View style={styles.recording}>
+          <Button
+            type="solid"
+            buttonStyle={styles.recordBtn}
+            onPress={recordOn}
+            icon={<Icon name="microphone-alt" size={50} color="#fff" />}
+          />
+        </View>
+      )}
       {login && <LoginPopUp setLogin={setLogin} />}
       {record && <PopUp setRecord={setRecord} />}
-      <AppFilter />
+      {filter ? <Feedfilter setFilter={setFilter} /> : null}
+      <AppFilter setFilter={setFilter} />
     </View>
   );
 };
