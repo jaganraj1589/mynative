@@ -64,7 +64,8 @@ const AudioPlayer = ({uri, audioduration}) => {
   };
   useEffect(() => {
     setDone(0);
-  }, [setDone]);
+  }, []);
+
   useEffect(() => {
     configureAudio();
     return destroy;
@@ -80,7 +81,8 @@ const AudioPlayer = ({uri, audioduration}) => {
           width={5}
           done={done ? done : 0}
           radius={25}
-          duration={audioduration}>
+          duration={audioduration}
+          setDone={setDone}>
           <FontAwesomeIcon
             icon={playerState.isPlaying ? faPause : faPlay}
             size={15}

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {View, Modal, StyleSheet, Dimensions, Text} from 'react-native';
 import {CheckBox, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import MultiSelect from 'react-native-multiple-select';
 
 const Feedfilter = ({setFilter}) => {
   const [country, setCountry] = useState([]);
@@ -28,26 +27,7 @@ const Feedfilter = ({setFilter}) => {
           <View style={styles.modalIn}>
             <Text style={styles.audioTitle}>Filter</Text>
             <View style={{flex: 1, padding: 30}}>
-              <MultiSelect
-                hideTags
-                items={countryName}
-                uniqueKey="id"
-                onSelectedItemsChange={onSelectedItemsChange(country)}
-                selectedItems={countryName}
-                selectText="Pick Items"
-                searchInputPlaceholderText="Search Items..."
-                onChangeInput={text => console.log(text)}
-                tagRemoveIconColor="#CCC"
-                tagBorderColor="#CCC"
-                tagTextColor="#CCC"
-                selectedItemTextColor="#CCC"
-                selectedItemIconColor="#CCC"
-                itemTextColor="#000"
-                displayKey="name"
-                searchInputStyle={{color: '#CCC'}}
-                submitButtonColor="#48d22b"
-                submitButtonText="Submit"
-              />
+              <Text>Filter</Text>
             </View>
             <View style={styles.inputs}>
               <View style={styles.buttonsclose}>

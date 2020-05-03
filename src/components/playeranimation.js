@@ -1,16 +1,17 @@
 import React, {FunctionComponent, useEffect} from 'react';
 import {StyleSheet, View, Animated, Easing, Platform} from 'react-native';
-type Props = {
-  activeColor: string,
-  passiveColor: string,
-  baseColor: string,
-  width: number,
-  radius: number,
-  done: number,
-  duration: number,
-};
+import PropTypes from 'prop-types';
+// Player.PropTypes = {
+//   activeColor: PropTypes.string,
+//   passiveColor: PropTypes.string,
+//   baseColor: PropTypes.string,
+//   width: PropTypes.number,
+//   radius: PropTypes.number,
+//   done: PropTypes.number,
+//   duration: PropTypes.number,
+// };
 
-const Player: FunctionComponent<Props> = ({
+const Player = ({
   activeColor,
   passiveColor,
   baseColor,
@@ -18,6 +19,7 @@ const Player: FunctionComponent<Props> = ({
   done,
   width,
   duration,
+  setDone,
   children,
 }) => {
   const initialValueHalfCircle = done >= 50 ? 0 : 180;
@@ -68,9 +70,11 @@ const Player: FunctionComponent<Props> = ({
       easing: Easing.linear,
     }).start();
   };
-
   useEffect(() => {
-    if (done >= 50) {
+    setDone(0);
+  }, [setDone]);
+  useEffect(() => {
+    if ((done && done >= 50) || done == undefined) {
       firstAnimation();
     } else {
       secondAnimation();
@@ -128,7 +132,7 @@ const Player: FunctionComponent<Props> = ({
         {renderHalf(color2, [{rotate: rotate2}])}
         {renderHalf(passiveColor, [{rotate: rotate3}], {
           elevation: elevation3,
-          zIndex: elevation3,
+          zIndex: 3,
         })}
         <View
           style={[
