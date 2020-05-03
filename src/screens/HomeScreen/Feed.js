@@ -66,9 +66,7 @@ const Feed = ({feed}) => {
     var seconds = millis * 1000;
     return seconds;
   };
-  useEffect(() => {
-    console.info(feedState);
-  }, [feedState]);
+
 
   return (
     <View style={styles.card}>

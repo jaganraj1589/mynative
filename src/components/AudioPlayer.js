@@ -61,9 +61,8 @@ const AudioPlayer = ({uri, audioduration}) => {
     await TrackPlayer.destroy();
   };
 
-  useEffect(async () => {
-    await configureAudio();
-
+  useEffect(() => {
+    configureAudio();
     return destroy;
   }, []);
 
