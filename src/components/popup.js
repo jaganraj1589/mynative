@@ -34,6 +34,7 @@ const RECORD_STATE = {
 const LIMIT = 60 * 1000;
 
 const PopUp = ({setRecord}) => {
+  const [titleErr, setTitleErr] = useState('');
   const path = Platform.select({
     ios: 'hello.m4a',
     android: 'sdcard/hello.mp4',
@@ -185,7 +186,7 @@ const PopUp = ({setRecord}) => {
   };
 
   const postFeed = async () => {
-    if (title && audiolink && audioText && fileUri) {
+    if (title && fileUri) {
       const formdata = new FormData();
       formdata.append('speakerId', await AsyncStorage.getItem('userId'));
       formdata.append('link', audiolink);
@@ -207,6 +208,8 @@ const PopUp = ({setRecord}) => {
         .catch(e => {
           console.log(e);
         });
+    } else {
+      setTitleErr("Please post your speech and title")
     }
   };
 
@@ -226,7 +229,7 @@ const PopUp = ({setRecord}) => {
       <Modal animationType="fade" transparent>
         <View style={styles.modalPopup}>
           <View style={styles.modalIn}>
-            <Text style={styles.audioTitle}>Submit your Audio</Text>
+            <Text style={styles.audioTitle}>Your Speech</Text>
             <Text style={styles.audioText}>{recorderState.state}</Text>
             <Icon
               name={recorderState.iconName}
@@ -245,26 +248,23 @@ const PopUp = ({setRecord}) => {
             <Text style={styles.audioText}>{recording.recordTime}</Text>
             <View style={styles.inputs}>
               <Input
-                placeholder="Enter your Audio Title"
+                placeholder="Speech title"
                 errorStyle={{color: 'red'}}
-                inputStyle={styles.inputss}
-                errorMessage="Mandatory field"
+                errorMessage={titleErr}
                 onChangeText={e => setTitle(e)}
               />
               <Input
-                placeholder="Enter language"
+                placeholder="Speech language"
                 errorStyle={{color: 'red'}}
-                inputStyle={styles.inputss}
-                errorMessage="Mandatory field"
+                errorMessage=""
                 onChangeText={e => {
                   setAudioText(e);
                 }}
               />
               <Input
-                placeholder="Paste your link"
+                placeholder="Speech link"
                 errorStyle={{color: 'red'}}
-                inputStyle={styles.inputss}
-                errorMessage="Mandatory field"
+                errorMessage=""
                 onChangeText={e => setAudiolink(e)}
               />
               <View style={styles.buttons}>
