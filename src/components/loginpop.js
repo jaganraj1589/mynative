@@ -9,58 +9,58 @@ const LoginPopUp = ({setLogin}) => {
   const [requestEmail, setRequestEmail] = useState('');
   const [emailErr, setEmailErr] = useState('');
   const [requestEmailErr, setRequestEmailErr] = useState('');
+  const [apply, setApply] = useState('');
 
-
-  const validateIsEmail = (email) => {
-      return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
-  }
+  const validateIsEmail = email => {
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+  };
   const userLogins = () => {
     userLogin({
       email: email,
-      userType: "listner"
+      userType: 'listner',
     })
-      .then((response) => { 
-         if (response.data && response.data.error) {
+      .then(response => {
+        if (response.data && response.data.error) {
           setEmailErr(response.data.message);
         } else {
           setLogin(false);
         }
-       })
+      })
       .catch(({response}) => {
         console.info(response);
       });
-  }
+  };
   const validateUserLogin = () => {
-    if (!validateIsEmail(email) || email == "") {
-      setEmailErr("Please enter valid email");
+    if (!validateIsEmail(email) || email == '') {
+      setEmailErr('Please enter valid email');
     } else {
-      setEmailErr("");
+      setEmailErr('');
       userLogins();
     }
-  }
+  };
   const userRequests = () => {
     userRequest({
-      email: requestEmail
+      email: requestEmail,
     })
-      .then((response) => { 
+      .then(response => {
         if (response.data && response.data.error) {
           setRequestEmailErr(response.data.message);
         } else {
           setLogin(false);
         }
-       })
+      })
       .catch(({response}) => {
         console.info(response);
       });
-  }
+  };
   const validateUserRequest = () => {
-    if (!validateIsEmail(requestEmail) || requestEmail == "") {
-      setRequestEmailErr("Please enter valid email");
+    if (!validateIsEmail(requestEmail) || requestEmail == '') {
+      setRequestEmailErr('Please enter valid email');
     } else {
-      setRequestEmailErr("");
+      setRequestEmailErr('');
       userRequests();
     }
-  }
+  };
   return (
     <View>
       <Modal animationType="fade" transparent>
@@ -68,43 +68,59 @@ const LoginPopUp = ({setLogin}) => {
           <View style={styles.modalIn}>
             <Text style={styles.audioTitle}>Account Detail</Text>
             <View style={styles.inputs}>
-              <Input
-                placeholder="Enter your Email id"
-                errorStyle={{color: 'red'}}
-                errorMessage={emailErr}
-                onChangeText={e => setEmail(e)}
-              />
               <View style={styles.buttons}>
+                <Input
+                  placeholder="Enter your Email id"
+                  leftIcon={<Icon name="email" size={24} color="#ccc" />}
+                  inputStyle={styles.inputss}
+                  errorStyle={{color: 'red'}}
+                  errorMessage={emailErr}
+                  onChangeText={e => setEmail(e)}
+                />
                 <Button
                   type="solid"
                   buttonStyle={styles.button}
-                  icon={<Icon name="done" size={30} color="#0caf46"/>}
+                  icon={<Icon name="done" size={20} color="#fff" />}
                   onPress={validateUserLogin}
                 />
               </View>
-              <Text style={styles.audioText}>
-                Or Apply to become a verified speaker
-              </Text>
-              <Input
-                placeholder="Enter your Email id"
-                errorStyle={{color: 'red'}}
-                errorMessage={requestEmailErr}
-                onChangeText={e => setRequestEmail(e)}
-              />
-              <View style={styles.buttons}>
-                <Button
-                  type="solid"
-                  buttonStyle={styles.button}
-                  icon={<Icon name="done" size={30} color="#0caf46" />}
-                  onPress={validateUserRequest}
-                />
+              <View style={styles.audioText}>
+                <Text style={styles.audioTextin}>
+                  Or Apply to become a verified speaker
+                </Text>
+                {apply ? null : (
+                  <Button
+                    title="Apply"
+                    type="solid"
+                    onPress={e => setApply(true)}
+                  />
+                )}
               </View>
-              <View style={styles.buttons}>
+              {apply ? (
+                <View style={styles.buttons}>
+                  <Input
+                    placeholder="Enter your Email id"
+                    leftIcon={<Icon name="email" size={24} color="#ccc" />}
+                    inputStyle={styles.inputss}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={requestEmailErr}
+                    onChangeText={e => setRequestEmail(e)}
+                  />
+                  <Button
+                    type="solid"
+                    buttonStyle={styles.button}
+                    icon={<Icon name="done" size={20} color="#fff" />}
+                    onPress={validateUserRequest}
+                  />
+                </View>
+              ) : null}
+
+              <View style={styles.buttonsclose}>
                 <Button
                   type="solid"
-                  buttonStyle={styles.button}
+                  buttonStyle={styles.clsbutton}
                   onPress={e => setLogin(false)}
-                  icon={<Icon name="close" size={30} color="#9c9c9c" />}
+                  icon={<Icon name="close" size={20} color="#9c9c9c" />}
                 />
               </View>
             </View>
@@ -146,34 +162,60 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   audioText: {
-    fontSize: 14,
-    fontWeight: 'normal',
-    color: '#333',
     marginBottom: 10,
-    marginTop: 50,
-    width: '80%',
+    marginTop: 30,
+    width: '100%',
     textAlign: 'center',
     alignSelf: 'center',
+    backgroundColor: '#e4e4e4',
+    padding: 10,
+    borderRadius: 5,
+  },
+  audioTextin: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: '#586267',
+    textAlign: 'center',
+    marginBottom: 10,
   },
   inputs: {
     marginTop: 20,
     marginBottom: 20,
-    width: '100%',
+    width: '80%',
   },
   buttons: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    width: '100%',
     alignItems: 'center',
   },
+  buttonsclose: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  inputss: {
+    fontSize: 14,
+  },
   button: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    backgroundColor: '#fff',
-    borderColor: '#9c9c9c',
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    backgroundColor: '#4cb6ac',
+    borderColor: '#4cb6ac',
     borderWidth: 2,
+    marginLeft: 20,
+  },
+  clsbutton: {
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+    borderWidth: 2,
+    marginLeft: 20,
   },
 });
 export default LoginPopUp;

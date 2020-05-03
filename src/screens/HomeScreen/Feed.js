@@ -86,8 +86,13 @@ const Feed = ({feed}) => {
           <Text style={{textAlign: 'center', width: 100, fontSize: 14}}>
             {feedState.followers} Followers
           </Text>
-          <TouchableOpacity style={styles.followBtn} onPress={followUnFollow}>
-            <Text style={{color: '#fff', textAlign: 'center'}}>
+          <TouchableOpacity
+            style={feedState.isFollowed ? styles.unfollowBtn : styles.followBtn}
+            onPress={followUnFollow}>
+            <Text
+              style={
+                feedState.isFollowed ? styles.unfollowText : styles.followText
+              }>
               {feedState.isFollowed ? 'Unfollow' : 'Follow'}
             </Text>
           </TouchableOpacity>
@@ -97,10 +102,10 @@ const Feed = ({feed}) => {
         <View style={styles.postDetail}>
           {/*<Text style={{color: '#8c8c8c'}}>8 mins ago</Text>*/}
           <Text numberOfLines={1}>{feed.title}</Text>
-          <Text numberOfLines={1}>{secondsToHms(feed.duration)}</Text>
+          <Text numberOfLines={1} style={{color: '#8c8c8c'}}>{feed.duration + 'sec'}</Text>
           <Text
             numberOfLines={1}
-            style={{color: 'blue'}}
+            style={{color: '#4a7da5'}}
             onPress={() => Linking.openURL(feed.link)}>
             Link
           </Text>

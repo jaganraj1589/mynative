@@ -72,6 +72,28 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: 'Roboto',
     fontSize: 12,
+    borderColor: "#fb9f1d",
+    borderWidth: 1,
+  },
+  unfollowBtn: {
+    backgroundColor: '#fff',
+    padding: 3,
+    color: '#fb9f1d',
+    borderRadius: 5,
+    width: 100,
+    marginTop: 5,
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    borderColor: "#fb9f1d",
+    borderWidth: 1,
+  },
+  followText: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+  unfollowText: {
+    color: '#fb9f1d',
+    textAlign: 'center',
   },
   followBlock: {
     width: '40%',
