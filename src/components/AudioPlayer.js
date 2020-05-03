@@ -73,7 +73,7 @@ const AudioPlayer = ({uri, audioduration}) => {
         activeColor="#eb3434"
         passiveColor="#ccc"
         baseColor="white"
-        width={10}
+        width={5}
         done={done}
         radius={25}
         duration={audioduration}>

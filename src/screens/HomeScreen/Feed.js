@@ -83,7 +83,13 @@ const Feed = ({feed}) => {
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>{feed.name}</Text>
         </View>
         <View style={styles.followBlock}>
-          <Text style={{textAlign: 'center', width: 100, fontSize: 14}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              width: 100,
+              fontSize: 12,
+              color: '#545454',
+            }}>
             {feedState.followers} Followers
           </Text>
           <TouchableOpacity
@@ -102,7 +108,9 @@ const Feed = ({feed}) => {
         <View style={styles.postDetail}>
           {/*<Text style={{color: '#8c8c8c'}}>8 mins ago</Text>*/}
           <Text numberOfLines={1}>{feed.title}</Text>
-          <Text numberOfLines={1} style={{color: '#8c8c8c'}}>{feed.duration + 'sec'}</Text>
+          <Text numberOfLines={1} style={{color: '#8c8c8c'}}>
+            {feed.duration + 'sec'}
+          </Text>
           <Text
             numberOfLines={1}
             style={{color: '#4a7da5'}}
@@ -117,11 +125,12 @@ const Feed = ({feed}) => {
         />
 
         <View style={styles.likes}>
-          <Text>{feedState.likes} likes</Text>
+          <Text style={styles.likestext}>{feedState.likes} likes</Text>
           <FontAwesomeIcon
             icon={feedState.isLiked ? faFilledHeart : faHeart}
             color={'#eb3434'}
             onPress={likeUnlike}
+            size={18}
           />
         </View>
       </View>

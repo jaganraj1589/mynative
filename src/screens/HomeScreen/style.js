@@ -1,5 +1,5 @@
 import {Dimensions} from 'react-native';
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const {height, width} = Dimensions.get('window');
 
@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   userImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
+    width: 30,
+    height: 30,
+    borderRadius: 30,
     marginRight: 10,
   },
   userNameBlock: {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   followBtn: {
-    backgroundColor: '#fb9f1d',
+    backgroundColor: '#d63529',
     padding: 3,
     color: '#fff',
     borderRadius: 5,
@@ -72,28 +72,30 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: 'Roboto',
     fontSize: 12,
-    borderColor: "#fb9f1d",
+    borderColor: '#d63529',
     borderWidth: 1,
   },
   unfollowBtn: {
     backgroundColor: '#fff',
     padding: 3,
-    color: '#fb9f1d',
+    color: '#d63529',
     borderRadius: 5,
     width: 100,
     marginTop: 5,
     fontFamily: 'Roboto',
-    fontSize: 12,
-    borderColor: "#fb9f1d",
+    fontSize: 10,
+    borderColor: '#d63529',
     borderWidth: 1,
   },
   followText: {
     color: '#fff',
     textAlign: 'center',
+    fontSize: 12,
   },
   unfollowText: {
-    color: '#fb9f1d',
+    color: '#d63529',
     textAlign: 'center',
+    fontSize: 12,
   },
   followBlock: {
     width: '40%',
@@ -117,6 +119,10 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  likestext: {
+    fontSize: 12,
+    color: '#545454',
   },
   recordBtn: {
     width: 100,
@@ -142,8 +148,8 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.8,
-    shadowRadius: 50,
-    elevation: 10,
+    shadowRadius: 40,
+    elevation: 11,
   },
 });
 export default styles;

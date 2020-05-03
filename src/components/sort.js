@@ -8,11 +8,11 @@ const AppFilter = () => {
   return (
     <View style={styles.filter}>
       <View style={styles.logo}>
-        <FontAwesomeIcon icon={faFilter} color={'#333'} size={30} />
+        <FontAwesomeIcon icon={faFilter} color={'#828689'} size={24} />
       </View>
       <View style={styles.sorting}>
-        <FontAwesomeIcon icon={faStar} color={'#333'} size={24} />
-        <FontAwesomeIcon icon={faClock} color={'#333'} size={24} />
+        <FontAwesomeIcon icon={faStar} color={'#828689'} size={24} />
+        <FontAwesomeIcon icon={faClock} color={'#828689'} size={24} />
       </View>
     </View>
   );
@@ -21,14 +21,18 @@ const styles = StyleSheet.create({
   filter: {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: 15,
     flexDirection: 'row',
-    height: 70,
     backgroundColor: '#fff',
     color: '#fff',
     alignItems: 'center',
     borderTopColor: '#ccc',
-    borderTopWidth: 2,
+    borderTopWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -20},
+    shadowOpacity: 0.8,
+    shadowRadius: 80,
+    elevation: 10,
   },
   logo: {
     flexGrow: 1,
