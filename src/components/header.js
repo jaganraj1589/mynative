@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import {Button} from 'react-native-elements';
 
-const AppHeader = ({navigation, showProfile, setLogin}) => {
+const AppHeader = ({navigation, fetchAllFeeds, showProfile, setLogin}) => {
   const toProfile = () => {
     navigation.navigate('profile');
   };
@@ -18,7 +18,7 @@ const AppHeader = ({navigation, showProfile, setLogin}) => {
       end={{x: 1, y: 0}}
       colors={['#fe3262', '#fb4c57', '#fb6e5c']}>
       <View style={styles.logo}>
-        <FontAwesomeIcon icon={faPodcast} color={'#feb44b'} size={40} />
+        <FontAwesomeIcon icon={faPodcast}  onPress={e => fetchAllFeeds()} color={'#feb44b'} size={40} />
         <Text style={styles.logoText}>BADS</Text>
       </View>
       {showProfile && (

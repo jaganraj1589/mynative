@@ -43,7 +43,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <AppHeader navigation={navigation} showProfile setLogin={setLogin} />
+      <AppHeader navigation={navigation} fetchAllFeeds={fetchAllFeeds} showProfile setLogin={setLogin} />
       <ScrollView style={styles.feedContainer}>
         <View style={styles.cardCover}>
           <FlatList

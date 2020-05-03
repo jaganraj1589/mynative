@@ -3,6 +3,7 @@ import {View, Modal, StyleSheet, Dimensions, Text} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {userLogin, userRequest} from '../services/users';
+import {saveSession} from '../services/storage';
 
 const LoginPopUp = ({setLogin}) => {
   const [email, setEmail] = useState('');
@@ -23,6 +24,14 @@ const LoginPopUp = ({setLogin}) => {
         if (response.data && response.data.error) {
           setEmailErr(response.data.message);
         } else {
+          if (response.data && response.data.data) {
+            let userinfo = response.data.data[0];
+            saveSession({
+                email: userinfo.email ? userinfo.email : "",
+                userType: userinfo.userType ? userinfo.userType : "",
+                userId: userinfo._id ? userinfo._id : "" 
+            });
+          }
           setLogin(false);
         }
       })
