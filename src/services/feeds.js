@@ -11,11 +11,21 @@ export const feedAction = (payload) => {
 	return getAxios().post(FEED_ACTION_URL, payload);
 };
 
-export const addFeed = (formData) => {
-	console.info(formData);
-	return getAxios().post(ADD_FEED_URL, formData, {
+export const addFeed = (formdata) => {
+	console.info(formdata);
+	return getAxios().post(ADD_FEED_URL, formdata, {
           headers: {
-              'Content-Type': 'multipart/form-data',
+          	'Accept': 'application/json',
+            'content-type': 'multipart/form-data',
           },
       });
+	// const config = {
+	//   method: 'POST',
+	//   headers: {
+	//    'Accept': 'application/json',
+	//    'Content-Type': 'multipart/form-data',
+	//   },
+	//   body: formdata,
+	//  };
+	// return fetch(ADD_FEED_URL, config);
 };

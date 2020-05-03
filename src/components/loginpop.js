@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {View, Modal, StyleSheet, Dimensions, Text} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Modal, StyleSheet, Dimensions, Text, AsyncStorage} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {userLogin, userRequest} from '../services/users';
-import {saveSession} from '../services/storage';
+import {saveSession, getSession} from '../services/storage';
 
-const LoginPopUp = ({setLogin}) => {
+const LoginPopUp = ({setLogin, loadFeeds}) => {
   const [email, setEmail] = useState('');
   const [requestEmail, setRequestEmail] = useState('');
   const [emailErr, setEmailErr] = useState('');
@@ -32,13 +32,16 @@ const LoginPopUp = ({setLogin}) => {
                 userId: userinfo._id ? userinfo._id : "" 
             });
           }
+          console.info(userinfo);
           setLogin(false);
+          loadFeeds();
         }
       })
       .catch(({response}) => {
         console.info(response);
       });
   };
+
   const validateUserLogin = () => {
     if (!validateIsEmail(email) || email == '') {
       setEmailErr('Please enter valid email');
@@ -47,6 +50,7 @@ const LoginPopUp = ({setLogin}) => {
       userLogins();
     }
   };
+
   const userRequests = () => {
     userRequest({
       email: requestEmail,
@@ -62,6 +66,7 @@ const LoginPopUp = ({setLogin}) => {
         console.info(response);
       });
   };
+
   const validateUserRequest = () => {
     if (!validateIsEmail(requestEmail) || requestEmail == '') {
       setRequestEmailErr('Please enter valid email');
@@ -70,6 +75,15 @@ const LoginPopUp = ({setLogin}) => {
       userRequests();
     }
   };
+
+  const loadUserData = async () => {
+    const session = await getSession();
+  };
+
+  useEffect(() => {
+    loadUserData();
+  }, [setLogin]);
+
   return (
     <View>
       <Modal animationType="fade" transparent>

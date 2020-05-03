@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {
     View, Modal, StyleSheet, Dimensions, Text, 
-    PermissionsAndroid, Platform
+    PermissionsAndroid, Platform, AsyncStorage
   } from 'react-native';
+import fs from 'react-native-fs';
 
 import {Input, Button} from 'react-native-elements';
 import PlayBtn from './playbtn';
@@ -15,7 +16,6 @@ import AudioRecorderPlayer,{
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
 import {addFeed} from '../services/feeds';
 
 const RECORD_STATE = {
@@ -25,7 +25,7 @@ const RECORD_STATE = {
   PAUSE_RECORD: "Pause",
 };
 
-const LIMIT = 5 * 1000;
+const LIMIT = 60 * 1000;
 
 const PopUp = ({setRecord}) => {
   const path = Platform.select({
@@ -169,25 +169,22 @@ const PopUp = ({setRecord}) => {
     }
   };
 
-  const postFeed  = () => {
-    console.info(title , audiolink, audioText , fileUri);
+  const postFeed  = async () => {
     if (title && audiolink && audioText && fileUri) {
       const formdata = new FormData();
-      formdata.append("followerId", "123");
+      formdata.append("speakerId", await AsyncStorage.getItem('userId'));
       formdata.append("link", audiolink);
       formdata.append("language", audioText);
       formdata.append("title", title);
-      formdata.append('audio', {
-          name: "geeggegeg",
-          uri:  fileUri,
-          type: 'multipart/form-data',
-      });
+      formdata.append("fileName", Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)+".mp4");
+      const base64Audio = await fs.readFile(fileUri, 'base64')
+      formdata.append("audio", `data:audio/mp4;base64,${base64Audio}`);
       addFeed(formdata)
        .then((response) => {
          setRecord(false);
        })
        .catch((e) => {
-         console.info(e);
+         console.log(e);
        });
     }
   };

@@ -5,3 +5,11 @@ export const saveSession = (values) => {
 	AsyncStorage.setItem('userId', values.userId);
 	AsyncStorage.setItem('email', values.email);
 };
+
+export const getSession = async () => {
+	return {
+		userType: await AsyncStorage.setItem('userType'),
+		userId: await AsyncStorage.setItem('userId'),
+		email: await AsyncStorage.setItem('email')
+	};
+};

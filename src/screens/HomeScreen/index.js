@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}) => {
   const canShowFeed = async () => {
     const userType = await AsyncStorage.getItem('userType');
     console.info(userType);
-    if (userType === 'receiver') {
+    if (userType === 'speaker') {
       setCanRecord(true);
     }
   };
@@ -68,7 +68,7 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <AppHeader
         navigation={navigation}
-        fetchAllFeeds={fetchAllFeeds}
+        loadFeeds={loadFeeds}
         showProfile
         setLogin={setLogin}
       />
@@ -91,7 +91,7 @@ const HomeScreen = ({navigation}) => {
           />
         </View>
       )}
-      {login && <LoginPopUp setLogin={setLogin} />}
+      {login && <LoginPopUp setLogin={setLogin} loadFeeds={loadFeeds} />}
       {record && <PopUp setRecord={setRecord} />}
       {filter ? <Feedfilter setFilter={setFilter} /> : null}
       <AppFilter setFilter={setFilter} />
