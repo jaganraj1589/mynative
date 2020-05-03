@@ -1,14 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import {
-    View, Modal, StyleSheet, Dimensions, Text, 
-    PermissionsAndroid, Platform, AsyncStorage
-  } from 'react-native';
+  View,
+  Modal,
+  StyleSheet,
+  Dimensions,
+  Text,
+  PermissionsAndroid,
+  Platform,
+  AsyncStorage,
+} from 'react-native';
 import fs from 'react-native-fs';
 
 import {Input, Button} from 'react-native-elements';
 import PlayBtn from './playbtn';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AudioRecorderPlayer,{
+import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
   AudioEncoderAndroidType,
@@ -19,48 +25,51 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {addFeed} from '../services/feeds';
 
 const RECORD_STATE = {
-  START_RECORD: "Start Record",
-  STOP_RECORD: "Stop Record",
-  PLAY_RECORD: "Play",
-  PAUSE_RECORD: "Pause",
+  START_RECORD: 'Start Record',
+  STOP_RECORD: 'Stop Record',
+  PLAY_RECORD: 'Play',
+  PAUSE_RECORD: 'Pause',
 };
 
 const LIMIT = 60 * 1000;
 
 const PopUp = ({setRecord}) => {
   const path = Platform.select({
-      ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4',
+    ios: 'hello.m4a',
+    android: 'sdcard/hello.mp4',
   });
   const [title, setTitle] = useState('');
   const [fileUri, setFileUri] = useState('');
   const [audioText, setAudioText] = useState('');
   const [audiolink, setAudiolink] = useState('');
-  const [ recorderState, setRecorderState ] = useState({ state: RECORD_STATE.START_RECORD, iconName: "microphone-alt" });
-  const [ recording, setRecording ] = useState({recordTime: 0});
-  const [audioRecorderPlayer, ] = useState(new AudioRecorderPlayer());
+  const [recorderState, setRecorderState] = useState({
+    state: RECORD_STATE.START_RECORD,
+    iconName: 'microphone-alt',
+  });
+  const [recording, setRecording] = useState({recordTime: 0});
+  const [audioRecorderPlayer] = useState(new AudioRecorderPlayer());
 
   const getPermissions = async () => {
     if (Platform.OS === 'android') {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            {
-              title: 'Permissions for write access',
-              message: 'Give permission to your storage to write a file',
-              buttonPositive: 'ok',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('You can use the storage');
-          } else {
-            console.log('permission denied');
-            return;
-          }
-        } catch (err) {
-          console.warn(err);
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Permissions for write access',
+            message: 'Give permission to your storage to write a file',
+            buttonPositive: 'ok',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the storage');
+        } else {
+          console.log('permission denied');
           return;
         }
+      } catch (err) {
+        console.warn(err);
+        return;
+      }
     }
     if (Platform.OS === 'android') {
       try {
@@ -89,7 +98,7 @@ const PopUp = ({setRecord}) => {
     const result = await audioRecorderPlayer.stopRecorder();
     audioRecorderPlayer.removeRecordBackListener();
     setRecording(prevState => ({...prevState, recordSecs: 0}));
-    console.log("onStopRecord",result);
+    console.log('onStopRecord', result);
   };
 
   const onStartRecord = async () => {
@@ -101,38 +110,44 @@ const PopUp = ({setRecord}) => {
       AVFormatIDKeyIOS: AVEncodingOption.aac,
     };
     const result = await audioRecorderPlayer.startRecorder(path, audioSet);
-    audioRecorderPlayer.addRecordBackListener((e) => {
-      if ((Math.floor(e.current_position)/LIMIT) >= 1 ) {
-        setRecorderState({ state: RECORD_STATE.PLAY_RECORD, iconName: "play" });
+    audioRecorderPlayer.addRecordBackListener(e => {
+      if (Math.floor(e.current_position) / LIMIT >= 1) {
+        setRecorderState({state: RECORD_STATE.PLAY_RECORD, iconName: 'play'});
         onStopRecord();
       }
-      setRecording(prevState => ({...prevState, ...{
-        recordSecs: e.current_position,
-        recordTime: audioRecorderPlayer.mmssss(
-          Math.floor(e.current_position),
-        ),
-      }}));
+      setRecording(prevState => ({
+        ...prevState,
+        ...{
+          recordSecs: e.current_position,
+          recordTime: audioRecorderPlayer.mmssss(
+            Math.floor(e.current_position),
+          ),
+        },
+      }));
     });
     setFileUri(result);
-    console.log("uri", result);
+    console.log('uri', result);
   };
 
   const onStartPlay = async () => {
     console.log('onStartPlay');
     const msg = await audioRecorderPlayer.startPlayer(path);
     audioRecorderPlayer.setVolume(1.0);
-    console.log("On Start Play",msg);
-    audioRecorderPlayer.addPlayBackListener((e) => {
+    console.log('On Start Play', msg);
+    audioRecorderPlayer.addPlayBackListener(e => {
       if (e.current_position === e.duration) {
-        setRecorderState({ state: RECORD_STATE.PLAY_RECORD, iconName: "play" });
+        setRecorderState({state: RECORD_STATE.PLAY_RECORD, iconName: 'play'});
         onPausePlay();
       }
-      setRecording(prevState => ({...prevState, ...{
-        currentPositionSec: e.current_position,
-        currentDurationSec: e.duration,
-        playTime: audioRecorderPlayer.mmssss(Math.floor(e.current_position)),
-        duration: audioRecorderPlayer.mmssss(Math.floor(e.duration)),
-      }}));
+      setRecording(prevState => ({
+        ...prevState,
+        ...{
+          currentPositionSec: e.current_position,
+          currentDurationSec: e.duration,
+          playTime: audioRecorderPlayer.mmssss(Math.floor(e.current_position)),
+          duration: audioRecorderPlayer.mmssss(Math.floor(e.duration)),
+        },
+      }));
       return;
     });
   };
@@ -148,56 +163,62 @@ const PopUp = ({setRecord}) => {
   };
 
   const handleRecord = async () => {
-    console.info("Recorder state", recorderState.state);
-    switch(recorderState.state) {
+    console.info('Recorder state', recorderState.state);
+    switch (recorderState.state) {
       case RECORD_STATE.START_RECORD:
-        setRecorderState({ state: RECORD_STATE.STOP_RECORD, iconName: "stop" });
+        setRecorderState({state: RECORD_STATE.STOP_RECORD, iconName: 'stop'});
         onStartRecord();
         break;
       case RECORD_STATE.STOP_RECORD:
-        setRecorderState({ state: RECORD_STATE.PLAY_RECORD, iconName: "play" });
+        setRecorderState({state: RECORD_STATE.PLAY_RECORD, iconName: 'play'});
         onStopRecord();
         break;
       case RECORD_STATE.PLAY_RECORD:
-        setRecorderState({ state: RECORD_STATE.PAUSE_RECORD, iconName: "pause" });
+        setRecorderState({state: RECORD_STATE.PAUSE_RECORD, iconName: 'pause'});
         onStartPlay();
         break;
       case RECORD_STATE.PAUSE_RECORD:
-        setRecorderState({ state: RECORD_STATE.PLAY_RECORD, iconName: "play" });
+        setRecorderState({state: RECORD_STATE.PLAY_RECORD, iconName: 'play'});
         onPausePlay();
         break;
     }
   };
 
-  const postFeed  = async () => {
+  const postFeed = async () => {
     if (title && audiolink && audioText && fileUri) {
       const formdata = new FormData();
-      formdata.append("speakerId", await AsyncStorage.getItem('userId'));
-      formdata.append("link", audiolink);
-      formdata.append("language", audioText);
-      formdata.append("title", title);
-      formdata.append("fileName", Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)+".mp4");
-      const base64Audio = await fs.readFile(fileUri, 'base64')
-      formdata.append("audio", `data:audio/mp4;base64,${base64Audio}`);
+      formdata.append('speakerId', await AsyncStorage.getItem('userId'));
+      formdata.append('link', audiolink);
+      formdata.append('language', audioText);
+      formdata.append('title', title);
+      formdata.append(
+        'fileName',
+        Math.random()
+          .toString(36)
+          .replace(/[^a-z]+/g, '')
+          .substr(0, 5) + '.mp4',
+      );
+      const base64Audio = await fs.readFile(fileUri, 'base64');
+      formdata.append('audio', `data:audio/mp4;base64,${base64Audio}`);
       addFeed(formdata)
-       .then((response) => {
-         setRecord(false);
-       })
-       .catch((e) => {
-         console.log(e);
-       });
+        .then(response => {
+          setRecord(false);
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   };
 
   useEffect(() => {
-    audioRecorderPlayer.setSubscriptionDuration(0.09)
+    audioRecorderPlayer.setSubscriptionDuration(0.09);
     getPermissions();
 
     return onStopPlay;
   }, []);
 
   useEffect(() => {
-    console.info("Recorder statte", recorderState);
+    console.info('Recorder statte', recorderState);
   }, [recorderState]);
 
   return (
@@ -210,7 +231,15 @@ const PopUp = ({setRecord}) => {
             <Icon
               name={recorderState.iconName}
               size={50}
-              color="#000"
+              color={
+                recorderState.iconName === 'microphone-alt'
+                  ? '#eb3434'
+                  : recorderState.iconName === 'play'
+                  ? '#1eb750'
+                  : recorderState.iconName === 'stop'
+                  ? '#eb3434'
+                  : '#333'
+              }
               onPress={handleRecord}
             />
             <Text style={styles.audioText}>{recording.recordTime}</Text>
@@ -240,7 +269,9 @@ const PopUp = ({setRecord}) => {
                   type="solid"
                   buttonStyle={styles.button}
                   onPress={e => setRecord(false)}
-                  icon={<MaterialIcons name="close" size={30} color="#9c9c9c" />}
+                  icon={
+                    <MaterialIcons name="close" size={30} color="#9c9c9c" />
+                  }
                 />
                 <Button
                   type="solid"

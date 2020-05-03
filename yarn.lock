@@ -5354,6 +5354,13 @@ react-native-linear-gradient@^2.5.6:
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
   integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
+react-native-multiple-select@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/react-native-multiple-select/-/react-native-multiple-select-0.5.5.tgz#5bafdd3e66a42dbb600da7ebf0bd8a46a0437012"
+  integrity sha512-mkBqv6spOWrq3RBANnwfRHLqGITW99xpNZL07tMW4XXeEtOXSCgvjML+z0RIeOJKUUtbqCZA3cFigS5hSfCENQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-ratings@^6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"

@@ -18,7 +18,12 @@ const AppHeader = ({navigation, loadFeeds, showProfile, setLogin}) => {
       end={{x: 1, y: 0}}
       colors={['#fe3262', '#fb4c57', '#fb6e5c']}>
       <View style={styles.logo}>
-        <FontAwesomeIcon icon={faPodcast}  onPress={e => loadFeeds()} color={'#feb44b'} size={40} />
+        <FontAwesomeIcon
+          icon={faPodcast}
+          onPress={e => loadFeeds()}
+          color={'#feb44b'}
+          size={40}
+        />
         <Text style={styles.logoText}>BADS</Text>
       </View>
       {showProfile && (
