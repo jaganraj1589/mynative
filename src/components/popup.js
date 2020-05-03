@@ -184,7 +184,7 @@ const PopUp = ({setRecord}) => {
       });
       addFeed(formdata)
        .then((response) => {
-         console.info(response);
+         setRecord(false);
        })
        .catch((e) => {
          console.info(e);
