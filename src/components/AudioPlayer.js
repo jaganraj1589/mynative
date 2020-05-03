@@ -9,7 +9,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlay, faPause} from '@fortawesome/free-solid-svg-icons';
 import Player from './playeranimation';
 
-const AudioPlayer = ({uri}) => {
+const AudioPlayer = ({uri, audioduration}) => {
   let playbackInstance;
   const [done, setDone] = useState(0);
   const [playerState, setPlayerState] = useState({
@@ -76,7 +76,7 @@ const AudioPlayer = ({uri}) => {
         width={10}
         done={done}
         radius={25}
-        duration={1200}>
+        duration={audioduration}>
         <FontAwesomeIcon
           icon={playerState.isPlaying ? faPause : faPlay}
           size={15}

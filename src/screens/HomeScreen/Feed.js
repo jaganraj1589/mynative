@@ -62,6 +62,10 @@ const Feed = ({feed}) => {
       });
   };
 
+  const secondsToHms = millis => {
+    var seconds = millis * 1000;
+    return seconds;
+  };
   useEffect(() => {
     console.info(feedState);
   }, [feedState]);
@@ -93,6 +97,7 @@ const Feed = ({feed}) => {
         <View style={styles.postDetail}>
           {/*<Text style={{color: '#8c8c8c'}}>8 mins ago</Text>*/}
           <Text numberOfLines={1}>{feed.title}</Text>
+          <Text numberOfLines={1}>{secondsToHms(feed.duration)}</Text>
           <Text
             numberOfLines={1}
             style={{color: 'blue'}}
@@ -101,7 +106,10 @@ const Feed = ({feed}) => {
           </Text>
         </View>
 
-        <AudioPlayer uri={feed.audio} />
+        <AudioPlayer
+          uri={feed.audio}
+          audioduration={secondsToHms(feed.duration)}
+        />
 
         <View style={styles.likes}>
           <Text>{feedState.likes} likes</Text>
