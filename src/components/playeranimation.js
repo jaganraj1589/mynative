@@ -28,7 +28,7 @@ const Player = ({
   const animatedValue2 = new Animated.Value(initialValueHalfCircle);
   const animatedValue3 = new Animated.Value(initialValueInnerCircle);
   const timePerDegree = duration / 360;
-  const color1 = activeColor;
+  const color1 = done >= 50 ? activeColor : passiveColor;
   const color2 = done >= 50 ? activeColor : passiveColor;
 
   const firstAnimation = () => {
@@ -70,11 +70,9 @@ const Player = ({
       easing: Easing.linear,
     }).start();
   };
+
   useEffect(() => {
-    setDone(0);
-  }, [setDone]);
-  useEffect(() => {
-    if ((done && done >= 50) || done == undefined) {
+    if (done >= 50 || done == undefined) {
       firstAnimation();
     } else {
       secondAnimation();
