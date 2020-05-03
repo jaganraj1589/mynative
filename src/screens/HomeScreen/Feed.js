@@ -67,7 +67,6 @@ const Feed = ({feed}) => {
     return seconds;
   };
 
-
   return (
     <View style={styles.card}>
       <View style={styles.topRow}>
