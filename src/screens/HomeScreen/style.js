@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
     flex: 1,
+    backgroundColor: '#fff'
   },
   feedContainer: {
     paddingTop: 20,
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginHorizontal: 0,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: '#f7f7f7',
   },
   topRow: {
     justifyContent: 'space-around',

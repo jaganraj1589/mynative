@@ -128,7 +128,7 @@ const Player: FunctionComponent<Props> = ({
         {renderHalf(color2, [{rotate: rotate2}])}
         {renderHalf(passiveColor, [{rotate: rotate3}], {
           elevation: elevation3,
-          // zIndex: elevation3,
+          zIndex: elevation3,
         })}
         <View
           style={[
