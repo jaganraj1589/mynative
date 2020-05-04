@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Modal, StyleSheet, Dimensions, Text, AsyncStorage} from 'react-native';
+import {
+  View,
+  Modal,
+  StyleSheet,
+  Dimensions,
+  Text,
+  AsyncStorage,
+} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {userLogin, userRequest} from '../services/users';
@@ -27,9 +34,9 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
           if (response.data && response.data.data) {
             let userinfo = response.data.data[0];
             saveSession({
-                email: userinfo.email ? userinfo.email : "",
-                userType: userinfo.userType ? userinfo.userType : "",
-                userId: userinfo._id ? userinfo._id : "" 
+              email: userinfo.email ? userinfo.email : '',
+              userType: userinfo.userType ? userinfo.userType : '',
+              userId: userinfo._id ? userinfo._id : '',
             });
           }
           console.info(userinfo);
@@ -91,46 +98,70 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
           <View style={styles.modalIn}>
             <Text style={styles.audioTitle}>Account Detail</Text>
             <View style={styles.inputs}>
-              <View style={styles.buttons}>
-                <Input
-                  placeholder="Enter your Email id"
-                  leftIcon={<Icon name="email" size={24} color="#ccc" />}
-                  inputStyle={styles.inputss}
-                  errorStyle={{color: 'red'}}
-                  errorMessage={emailErr}
-                  onChangeText={e => setEmail(e)}
-                />
-                <Button
-                  type="solid"
-                  buttonStyle={styles.button}
-                  icon={<Icon name="done" size={20} color="#fff" />}
-                  onPress={validateUserLogin}
-                />
-              </View>
+              {!apply ? (
+                <>
+                  <View style={styles.audioText}>
+                    <Text style={styles.audioTextin}>
+                      Please enter your email address if you want to be able to
+                      retrieve your information in case you change phone (audios
+                      you've liked, speakers you've followed)
+                    </Text>
+                  </View>
+                  <View style={styles.buttons}>
+                    <View style={{width: '70%'}}>
+                      <Input
+                        placeholder="Enter your Email id"
+                        leftIcon={<Icon name="email" size={24} color="#ccc" />}
+                        inputStyle={styles.inputss}
+                        errorStyle={{color: 'red'}}
+                        errorMessage={emailErr}
+                        onChangeText={e => setEmail(e)}
+                      />
+                    </View>
+                    <Button
+                      type="solid"
+                      title="Login"
+                      buttonStyle={styles.button}
+                      icon={<Icon name="done" size={20} color="#fff" />}
+                      onPress={validateUserLogin}
+                    />
+                  </View>
+                </>
+              ) : null}
               <View style={styles.audioText}>
                 <Text style={styles.audioTextin}>
-                  Or Apply to become a verified speaker
+                  Apply to become a verified speaker : for now, we only allow as
+                  verified speakers Instagram users who have a large enough
+                  number of followers. To apply for vetted speaker status,
+                  please enter your email address in the field here and then
+                  send that same email address for verification in a DM on
+                  Instagram to the account KRDS, we'll get back to you asap,
+                  thanks :)
                 </Text>
                 {apply ? null : (
                   <Button
                     title="Apply"
                     type="solid"
+                    buttonStyle={styles.buttonApply}
                     onPress={e => setApply(true)}
                   />
                 )}
               </View>
               {apply ? (
                 <View style={styles.buttons}>
-                  <Input
-                    placeholder="Enter your Email id"
-                    leftIcon={<Icon name="email" size={24} color="#ccc" />}
-                    inputStyle={styles.inputss}
-                    errorStyle={{color: 'red'}}
-                    errorMessage={requestEmailErr}
-                    onChangeText={e => setRequestEmail(e)}
-                  />
+                  <View style={{width: '70%'}}>
+                    <Input
+                      placeholder="Enter your Email id"
+                      leftIcon={<Icon name="email" size={24} color="#ccc" />}
+                      inputStyle={styles.inputss}
+                      errorStyle={{color: 'red'}}
+                      errorMessage={requestEmailErr}
+                      onChangeText={e => setRequestEmail(e)}
+                    />
+                  </View>
                   <Button
                     type="solid"
+                    title="Apply"
                     buttonStyle={styles.button}
                     icon={<Icon name="done" size={20} color="#fff" />}
                     onPress={validateUserRequest}
@@ -157,7 +188,7 @@ const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   modalPopup: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalIn: {
@@ -166,7 +197,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    width: 300,
+    width: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
     borderRadius: 5,
@@ -182,16 +213,16 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     borderColor: '#dedede',
     borderBottomWidth: 1,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   audioText: {
     marginBottom: 10,
-    marginTop: 30,
+    marginTop: 20,
     width: '100%',
     textAlign: 'center',
     alignSelf: 'center',
-    backgroundColor: '#e4e4e4',
-    padding: 10,
+    backgroundColor: '#f7f7f7',
+    padding: 15,
     borderRadius: 5,
   },
   audioTextin: {
@@ -199,18 +230,19 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     color: '#586267',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   inputs: {
-    marginTop: 20,
-    marginBottom: 20,
-    width: '80%',
+    marginTop: 10,
+    marginBottom: 10,
+    width: '100%',
   },
   buttons: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    width: '100%',
   },
   buttonsclose: {
     display: 'flex',
@@ -221,15 +253,18 @@ const styles = StyleSheet.create({
   },
   inputss: {
     fontSize: 14,
+    width: '100%',
   },
   button: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
-    backgroundColor: '#4cb6ac',
-    borderColor: '#4cb6ac',
-    borderWidth: 2,
-    marginLeft: 20,
+    backgroundColor: '#d63529',
+    marginLeft: 10,
+    width: '60%',
+  },
+  buttonApply: {
+    backgroundColor: '#d63529',
+    marginTop: 10,
+    width: 100,
+    alignSelf: 'center',
   },
   clsbutton: {
     width: 40,

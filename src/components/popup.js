@@ -247,12 +247,14 @@ const PopUp = ({setRecord}) => {
               <Input
                 placeholder="Enter your Audio Title"
                 errorStyle={{color: 'red'}}
+                inputStyle={styles.inputss}
                 errorMessage="Mandatory field"
                 onChangeText={e => setTitle(e)}
               />
               <Input
                 placeholder="Enter language"
                 errorStyle={{color: 'red'}}
+                inputStyle={styles.inputss}
                 errorMessage="Mandatory field"
                 onChangeText={e => {
                   setAudioText(e);
@@ -261,6 +263,7 @@ const PopUp = ({setRecord}) => {
               <Input
                 placeholder="Paste your link"
                 errorStyle={{color: 'red'}}
+                inputStyle={styles.inputss}
                 errorMessage="Mandatory field"
                 onChangeText={e => setAudiolink(e)}
               />
@@ -291,7 +294,7 @@ const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   modalPopup: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalIn: {
@@ -300,7 +303,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    width: 300,
+    width: '100%',
     // height: height * 0.9,
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -336,6 +339,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     width: '100%',
     alignItems: 'center',
+    marginTop: 20,
   },
   button: {
     width: 50,
@@ -344,6 +348,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderColor: '#9c9c9c',
     borderWidth: 2,
+  },
+  inputss: {
+    fontSize: 14,
+    width: '100%',
   },
 });
 export default PopUp;
