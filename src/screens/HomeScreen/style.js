@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   feedContainer: {
     paddingTop: 20,
@@ -151,6 +151,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 40,
     elevation: 11,
+  },
+  secTime: {
+    color: '#6e727c',
+    marginLeft: 10,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingBottom: 3,
+    paddingTop: 3,
+    borderRadius: 2,
+    backgroundColor: '#fafafa',
   },
 });
 export default styles;

@@ -36,9 +36,9 @@ const HomeScreen = ({navigation}) => {
   const [filter, setFilter] = useState(false);
   const [loading, setLoading] = useState(false);
   const [feedsListState, setFeedsListState] = useState({
-    skip:5,
+    skip: 5,
     currentPage: 0,
-    feedListData: []
+    feedListData: [],
   });
   const recordOn = e => {
     setRecord(true);
@@ -52,30 +52,31 @@ const HomeScreen = ({navigation}) => {
         setLoading(false);
         handleLoadMore();
       })
-    .catch(response => {
-      setLoading(false);
-      console.error(response.body);
-    });
+      .catch(response => {
+        setLoading(false);
+        console.error(response.body);
+      });
   };
-  handleLoadMore = async () => {
-    
+  const handleLoadMore = async () => {
     let data = [];
-    feeds.slice([feedsListState.currentPage], [feedsListState.skip]).map((item, i) => {
-      data.push(item);
-    });
+    feeds
+      .slice([feedsListState.currentPage], [feedsListState.skip])
+      .map((item, i) => {
+        data.push(item);
+      });
     if (data.length > 0) {
       setLoading(true);
       await setFeedsListState(prevState => ({
         ...prevState,
-        currentPage: prevState.currentPage+5 ,
+        currentPage: prevState.currentPage + 5,
         skip: prevState.skip + 5,
-        feedListData: [...prevState.feedListData, ...data]
+        feedListData: [...prevState.feedListData, ...data],
       }));
       setTimeout(() => {
-          setLoading(false);
+        setLoading(false);
       }, 500);
     }
-  }
+  };
 
   const canShowFeed = async () => {
     const userType = await AsyncStorage.getItem('userType');
@@ -95,8 +96,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-     <Loader
-          loading={loading} />
+      <Loader loading={loading} />
       <AppHeader
         navigation={navigation}
         loadFeeds={loadFeeds}
@@ -104,20 +104,20 @@ const HomeScreen = ({navigation}) => {
         setLogin={setLogin}
       />
       {/* <ScrollView style={styles.feedContainer}> */}
-        <View style={styles.cardCover}>
-          <FlatList
-            //data={feeds}
-            data={feedsListState.feedListData}
-           // keyExtractor={(item, index) => index.toString()}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => <Feed feed={item} />}
-            initialNumToRender={5}
-            onEndReachedThreshold={5}
-            onScroll={() => {
-              this.handleLoadMore();
-            }}
-          />
-        </View>
+      <View style={styles.cardCover}>
+        <FlatList
+          //data={feeds}
+          data={feedsListState.feedListData}
+          // keyExtractor={(item, index) => index.toString()}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => <Feed feed={item} />}
+          initialNumToRender={5}
+          onEndReachedThreshold={5}
+          onScroll={() => {
+            this.handleLoadMore();
+          }}
+        />
+      </View>
       {/* </ScrollView> */}
       {canRecord && (
         <View style={styles.recording}>
@@ -132,7 +132,7 @@ const HomeScreen = ({navigation}) => {
       {login && <LoginPopUp setLogin={setLogin} loadFeeds={loadFeeds} />}
       {record && <PopUp setRecord={setRecord} />}
       {filter ? <Feedfilter setFilter={setFilter} /> : null}
-      <AppFilter setFilter={setFilter} />
+      <AppFilter setFilter={setFilter} navigation={navigation}/>
     </View>
   );
 };

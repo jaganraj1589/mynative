@@ -8,8 +8,8 @@
 
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
 
 import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
@@ -17,21 +17,20 @@ import ProfileScreen from './src/screens/ProfileScreen';
 const Stack = createStackNavigator();
 
 const HomeStackNavigator = () => {
-	return (
-		<Stack.Navigator
-			initialRouteName="home"
-			headerMode="none"
-		>
-			<Stack.Screen name="Home" component={HomeScreen} />
-			<Stack.Screen name="profile" component={ProfileScreen} />
-		</Stack.Navigator>
-	);
+  return (
+    <Stack.Navigator initialRouteName="home" headerMode="none">
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="profile" component={ProfileScreen} />
+    </Stack.Navigator>
+  );
 };
 
 const App = () => {
-  	return (<NavigationContainer>
-		<HomeStackNavigator />
-	</NavigationContainer>);
+  return (
+    <NavigationContainer>
+      <HomeStackNavigator />
+    </NavigationContainer>
+  );
 };
 
 const styles = StyleSheet.create({

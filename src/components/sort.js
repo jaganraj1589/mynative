@@ -3,12 +3,23 @@ import {Text, View, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faFilter} from '@fortawesome/free-solid-svg-icons';
 import {faClock, faStar} from '@fortawesome/free-regular-svg-icons';
+import {Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Feather';
 
-const AppFilter = () => {
+const AppFilter = ({navigation}) => {
+  const toProfile = () => {
+    navigation.navigate('profile');
+  };
   return (
     <View style={styles.filter}>
       <View style={styles.logo}>
-        <FontAwesomeIcon icon={faFilter} color={'#828689'} size={24} />
+        <Button
+          type="clear"
+          buttonStyle={styles.filtericon}
+          onPress={toProfile}
+          icon={<Icon name="filter" size={24} color="#828689" />}
+        />
+        {/* <FontAwesomeIcon icon={faFilter} color={'#828689'} size={24} /> */}
       </View>
       <View style={styles.sorting}>
         <FontAwesomeIcon icon={faStar} color={'#828689'} size={24} />

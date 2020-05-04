@@ -1,10 +1,19 @@
-import React, {useState} from 'react';
-import {View, Modal, StyleSheet, Dimensions, Text} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  Modal,
+  StyleSheet,
+  Dimensions,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {CheckBox, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Feedfilter = ({setFilter}) => {
-  const [country, setCountry] = useState([]);
+  const [country, setCountry] = useState();
   const countryName = [
     {id: '1', name: 'America'},
     {id: '2', name: 'Argentina'},
@@ -17,8 +26,9 @@ const Feedfilter = ({setFilter}) => {
     {id: '9', name: 'Belgium'},
     {id: '10', name: 'Brazil'},
   ];
-  const onSelectedItemsChange = country => {
-    // setCountry(country);
+  // const multiSelect = useRef();
+  const onSelectionsChange = country => {
+    setCountry(country);
   };
   return (
     <View>
@@ -26,9 +36,7 @@ const Feedfilter = ({setFilter}) => {
         <View style={styles.modalPopup}>
           <View style={styles.modalIn}>
             <Text style={styles.audioTitle}>Filter</Text>
-            <View style={{flex: 1, padding: 30}}>
-              <Text>Filter</Text>
-            </View>
+            <View style={{flex: 1, padding: 30}} />
             <View style={styles.inputs}>
               <View style={styles.buttonsclose}>
                 <Button
@@ -49,7 +57,7 @@ const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   modalPopup: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalIn: {
@@ -58,7 +66,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    width: 300,
+    width: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
     borderRadius: 5,

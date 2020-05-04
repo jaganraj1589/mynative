@@ -10,7 +10,6 @@ import {feedAction} from '../../services/feeds';
 import {userAction} from '../../services/users';
 import {timeSince} from '../../utils/timesince';
 
-
 const Feed = ({feed}) => {
   const [feedState, setFeedState] = useState({
     likes: feed.likes,
@@ -107,9 +106,6 @@ const Feed = ({feed}) => {
         <View style={styles.postDetail}>
           <Text style={{color: '#8c8c8c'}}>{timeSince(feed.createdAt)}</Text>
           <Text numberOfLines={1}>{feed.title}</Text>
-          <Text numberOfLines={1} style={{color: '#8c8c8c'}}>
-            {feed.duration + 'sec'}
-          </Text>
           <Text
             numberOfLines={1}
             style={{color: '#4a7da5'}}
@@ -117,12 +113,21 @@ const Feed = ({feed}) => {
             {feed.link}
           </Text>
         </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <AudioPlayer
+            uri={feed.audio}
+            audioduration={secondsToHms(feed.duration)}
+          />
 
-        <AudioPlayer
-          uri={feed.audio}
-          audioduration={secondsToHms(feed.duration)}
-        />
-
+          <Text numberOfLines={1} style={styles.secTime}>
+            {feed.duration + 'sec'}
+          </Text>
+        </View>
         <View style={styles.likes}>
           <Text style={styles.likestext}>{feedState.likes} likes</Text>
           <FontAwesomeIcon
