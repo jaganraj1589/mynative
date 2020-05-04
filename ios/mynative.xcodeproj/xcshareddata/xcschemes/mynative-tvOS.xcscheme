@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "mynative-tvOS.app"
-               BlueprintName = "mynative-tvOS"
-               ReferencedContainer = "container:mynative.xcodeproj">
+               BuildableName = "bad-tvOS.app"
+               BlueprintName = "bad-tvOS"
+               ReferencedContainer = "container:bad.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "mynative-tvOSTests.xctest"
-               BlueprintName = "mynative-tvOSTests"
-               ReferencedContainer = "container:mynative.xcodeproj">
+               BuildableName = "bad-tvOSTests.xctest"
+               BlueprintName = "bad-tvOSTests"
+               ReferencedContainer = "container:bad.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "mynative-tvOS.app"
-            BlueprintName = "mynative-tvOS"
-            ReferencedContainer = "container:mynative.xcodeproj">
+            BuildableName = "bad-tvOS.app"
+            BlueprintName = "bad-tvOS"
+            ReferencedContainer = "container:bad.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "mynative-tvOS.app"
-            BlueprintName = "mynative-tvOS"
-            ReferencedContainer = "container:mynative.xcodeproj">
+            BuildableName = "bad-tvOS.app"
+            BlueprintName = "bad-tvOS"
+            ReferencedContainer = "container:bad.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

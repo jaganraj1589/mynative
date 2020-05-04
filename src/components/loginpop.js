@@ -39,7 +39,6 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
               userId: userinfo._id ? userinfo._id : '',
             });
           }
-          console.info(userinfo);
           setLogin(false);
           loadFeeds();
         }

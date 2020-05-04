@@ -8,6 +8,8 @@ import AudioPlayer from '../../components/AudioPlayer';
 import styles from './style.js';
 import {feedAction} from '../../services/feeds';
 import {userAction} from '../../services/users';
+import {timeSince} from '../../utils/timesince';
+
 
 const Feed = ({feed}) => {
   const [feedState, setFeedState] = useState({
@@ -103,7 +105,7 @@ const Feed = ({feed}) => {
       </View>
       <View style={styles.detail}>
         <View style={styles.postDetail}>
-          {/*<Text style={{color: '#8c8c8c'}}>8 mins ago</Text>*/}
+          <Text style={{color: '#8c8c8c'}}>{timeSince(feed.createdAt)}</Text>
           <Text numberOfLines={1}>{feed.title}</Text>
           <Text numberOfLines={1} style={{color: '#8c8c8c'}}>
             {feed.duration + 'sec'}

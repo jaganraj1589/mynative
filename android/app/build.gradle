@@ -133,7 +133,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mynative"
+        applicationId "com.bad"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
