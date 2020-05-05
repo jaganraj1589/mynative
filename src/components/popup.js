@@ -8,6 +8,7 @@ import {
   PermissionsAndroid,
   Platform,
   AsyncStorage,
+  Linking
 } from 'react-native';
 import fs from 'react-native-fs';
 
@@ -23,6 +24,7 @@ import AudioRecorderPlayer, {
 } from 'react-native-audio-recorder-player';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {addFeed} from '../services/feeds';
+import Loader from '../utils/loader';
 
 const RECORD_STATE = {
   START_RECORD: 'Start Record',
@@ -34,7 +36,11 @@ const RECORD_STATE = {
 const LIMIT = 60 * 1000;
 
 const PopUp = ({setRecord}) => {
+  const [loading, setLoading] = useState(false);
   const [titleErr, setTitleErr] = useState('');
+  const [linkErr, setLinkErr] = useState('');
+  const [langErr, setLangErr] = useState('');
+  const [validUrlErr, setValidUrlErr] = useState(false);
   const path = Platform.select({
     ios: 'hello.m4a',
     android: 'sdcard/hello.mp4',
@@ -43,6 +49,10 @@ const PopUp = ({setRecord}) => {
   const [fileUri, setFileUri] = useState('');
   const [audioText, setAudioText] = useState('');
   const [audiolink, setAudiolink] = useState('');
+
+  useEffect(() => {
+    if (validUrlErr) postFeed();
+  }, [validUrlErr]);
   const [recorderState, setRecorderState] = useState({
     state: RECORD_STATE.START_RECORD,
     iconName: 'microphone-alt',
@@ -184,9 +194,21 @@ const PopUp = ({setRecord}) => {
         break;
     }
   };
-
+   const onShouldStartLoadWithRequest = (url) => {
+     Linking.canOpenURL(url).then(supported => {
+         if (supported) {
+            setValidUrlErr(true);
+            setLinkErr("");
+            return false;
+         } else {
+            setLinkErr("Please enter the valid url Ex.(http://google.com)")
+            return true;
+         }
+     });
+  }
   const postFeed = async () => {
-    if (title && fileUri) {
+    setLoading(true);
+    if (title && fileUri && audioText && audiolink && validUrlErr && !(title.length >51)) {
       const formdata = new FormData();
       formdata.append('speakerId', await AsyncStorage.getItem('userId'));
       formdata.append('link', audiolink);
@@ -203,13 +225,20 @@ const PopUp = ({setRecord}) => {
       formdata.append('audio', `data:audio/mp4;base64,${base64Audio}`);
       addFeed(formdata)
         .then(response => {
+          setLoading(false);
           setRecord(false);
         })
         .catch(e => {
+          setTitleErr("Something went wrong please try again!");
+          setLoading(false);
           console.log(e);
         });
     } else {
-      setTitleErr("Please post your speech and title")
+      setLoading(false);
+      (!title || title.length >51) ? setTitleErr("Please enter the title(Max.50)") : setTitleErr("");
+      (!fileUri) ? setTitleErr("Please record your speech") : "";
+      !audioText ? setLangErr("Please enter the language") : setLangErr("");
+      !audiolink ? setLinkErr("Please enter the link") : onShouldStartLoadWithRequest(audiolink);
     }
   };
 
@@ -228,6 +257,8 @@ const PopUp = ({setRecord}) => {
     <View>
       <Modal animationType="fade" transparent>
         <View style={styles.modalPopup}>
+        <Loader
+          loading={loading} />
           <View style={styles.modalIn}>
             <Text style={styles.audioTitle}>Your Speech</Text>
             <Text style={styles.audioText}>{recorderState.state}</Text>
@@ -248,7 +279,7 @@ const PopUp = ({setRecord}) => {
             <Text style={styles.audioText}>{recording.recordTime}</Text>
             <View style={styles.inputs}>
               <Input
-                placeholder="Speech title"
+                placeholder="Speech title(Max.50)"
                 errorStyle={{color: 'red'}}
                 errorMessage={titleErr}
                 onChangeText={e => setTitle(e)}
@@ -256,15 +287,15 @@ const PopUp = ({setRecord}) => {
               <Input
                 placeholder="Speech language"
                 errorStyle={{color: 'red'}}
-                errorMessage=""
+                errorMessage={langErr}
                 onChangeText={e => {
                   setAudioText(e);
                 }}
               />
               <Input
-                placeholder="Speech link"
+                placeholder="Speech link Ex.(http://google.com)"
                 errorStyle={{color: 'red'}}
-                errorMessage=""
+                errorMessage={linkErr}
                 onChangeText={e => setAudiolink(e)}
               />
               <View style={styles.buttons}>

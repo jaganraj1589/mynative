@@ -20,11 +20,13 @@ import AppHeader from '../../components/header';
 import AppFilter from '../../components/sort';
 import styles from './style.js';
 import Feed from './Feed';
-import {getFeeds} from '../../services/feeds';
+import {getFeeds, getFeedByFetch} from '../../services/feeds';
 import LoginPopUp from '../../components/loginpop';
 import PopUp from '../../components/popup';
 import Feedfilter from '../../components/filter';
 import Loader from '../../utils/loader';
+import {dynamicSort} from '../../utils/dynamicsort';
+
 
 const image = {uri: 'https://reactjs.org/logo-og.png'};
 
@@ -35,6 +37,9 @@ const HomeScreen = ({navigation}) => {
   const [login, setLogin] = useState(false);
   const [filter, setFilter] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mostLiked, setMostLiked] = useState("");
+  const [mostRecent, setMostRecent] = useState("");
+
   const [feedsListState, setFeedsListState] = useState({
     skip: 5,
     currentPage: 0,
@@ -44,11 +49,18 @@ const HomeScreen = ({navigation}) => {
     setRecord(true);
   };
 
-  const fetchAllFeeds = () => {
+  const fetchAllFeeds = async() => {
+    setFeedsListState(prevState=> ({
+      currentPage: 0 ,
+      skip: 5,
+      feedListData: []
+    }));
     setLoading(true);
     getFeeds()
-      .then(({data: {data: feedData}}) => {
-        setFeeds(feedData);
+      .then( async({data: {data: feedData}}) => {
+        let sortedByMostLike = await feedData.sort(dynamicSort(mostLiked));
+        let sortedDataByDate = await sortedByMostLike.sort(dynamicSort(mostRecent));
+        setFeeds(sortedDataByDate);
         setLoading(false);
         handleLoadMore();
       })
@@ -57,26 +69,27 @@ const HomeScreen = ({navigation}) => {
         console.error(response.body);
       });
   };
-  const handleLoadMore = async () => {
-    let data = [];
-    feeds
-      .slice([feedsListState.currentPage], [feedsListState.skip])
-      .map((item, i) => {
-        data.push(item);
-      });
-    if (data.length > 0) {
-      setLoading(true);
-      await setFeedsListState(prevState => ({
-        ...prevState,
-        currentPage: prevState.currentPage + 5,
-        skip: prevState.skip + 5,
-        feedListData: [...prevState.feedListData, ...data],
-      }));
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
-    }
-  };
+  handleLoadMore = async () => {
+  //  console.log("handleLoadMore");
+    // let data = [];
+    // feeds.slice([feedsListState.currentPage], [feedsListState.skip]).map((item, i) => {
+    //   data.push(item);
+    // });
+    // if (data.length > 0) {
+    //   await setFeedsListState(prevState => ({
+    //     ...prevState,
+    //     currentPage: prevState.currentPage+5 ,
+    //     skip: prevState.skip + 5,
+    //     feedListData: [...prevState.feedListData, ...data]
+    //   }));
+    // }
+  }
+  const sortByMostRecent = async (data) => {
+    setMostRecent(data);
+  }
+  const sortByMostLiked = async (data) => {
+    setMostLiked(data);
+  }
 
   const canShowFeed = async () => {
     const userType = await AsyncStorage.getItem('userType');
@@ -92,7 +105,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     loadFeeds();
-  }, []);
+  }, [mostRecent, mostLiked]);
 
   return (
     <View style={styles.container}>
@@ -104,20 +117,20 @@ const HomeScreen = ({navigation}) => {
         setLogin={setLogin}
       />
       {/* <ScrollView style={styles.feedContainer}> */}
-      <View style={styles.cardCover}>
-        <FlatList
-          //data={feeds}
-          data={feedsListState.feedListData}
-          // keyExtractor={(item, index) => index.toString()}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => <Feed feed={item} />}
-          initialNumToRender={5}
-          onEndReachedThreshold={5}
-          onScroll={() => {
-            this.handleLoadMore();
-          }}
-        />
-      </View>
+        <View style={styles.cardCover}>
+          <FlatList
+            data={feeds}
+           // data={feedsListState.feedListData}
+            keyExtractor={(item, index) => index}
+            // keyExtractor={item => item.id}
+            renderItem={({item}) => <Feed feed={item} />}
+            initialNumToRender={5}
+            onEndReachedThreshold={5}
+            // onScroll={() => {
+            //   this.handleLoadMore();
+            // }}
+          />
+        </View>
       {/* </ScrollView> */}
       {canRecord && (
         <View style={styles.recording}>
@@ -132,7 +145,7 @@ const HomeScreen = ({navigation}) => {
       {login && <LoginPopUp setLogin={setLogin} loadFeeds={loadFeeds} />}
       {record && <PopUp setRecord={setRecord} />}
       {filter ? <Feedfilter setFilter={setFilter} /> : null}
-      <AppFilter setFilter={setFilter} navigation={navigation}/>
+      <AppFilter setFilter={setFilter} sortByMostRecent={sortByMostRecent} sortByMostLiked={sortByMostLiked}/>
     </View>
   );
 };

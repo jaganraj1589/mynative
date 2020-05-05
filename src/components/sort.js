@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, View, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faFilter} from '@fortawesome/free-solid-svg-icons';
 import {faClock, faStar} from '@fortawesome/free-regular-svg-icons';
@@ -7,12 +7,23 @@ import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAppContextValue} from '../stores/appcontext';
 
-const AppFilter = ({navigation}) => {
-  const toProfile = () => {
-    navigation.navigate('profile');
-  };
+const AppFilter = ({sortByMostRecent, sortByMostLiked}) => {
+  const [mostLiked, setMostLiked] = useState("likes");
+  const [mostRecent, setMostRecent] = useState("createdAt");
 
-  const {sortFollow, sortLikes} = useAppContextValue();
+  const sortByMostRecents = async () => {
+    setMostRecent(mostRecent == "createdAt" ? "-createdAt" : "createdAt")
+  }
+  const sortByMostLikes = async () => {
+    setMostLiked(mostLiked == "likes" ? "-likes" : "likes")
+  }
+  useEffect(() => {
+    sortByMostRecent(mostRecent);
+  }, [mostRecent]);
+  useEffect(() => {
+    sortByMostLiked(mostLiked);
+  }, [mostLiked]);
+
   return (
     <View style={styles.filter}>
       <View style={styles.logo}>
@@ -25,12 +36,8 @@ const AppFilter = ({navigation}) => {
         {/* <FontAwesomeIcon icon={faFilter} color={'#828689'} size={24} /> */}
       </View>
       <View style={styles.sorting}>
-        <TouchableOpacity onPress={sortFollow}>
-          <FontAwesomeIcon icon={faStar} color={'#828689'} size={24} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={sortLikes}>
-          <FontAwesomeIcon icon={faClock} color={'#828689'} size={24} />
-        </TouchableOpacity>
+        <FontAwesomeIcon icon={faStar} style={{color: mostLiked == "-likes" ? "#FF8A33" : "#828689"}} onPress={sortByMostLikes} size={24} />
+        <FontAwesomeIcon icon={faClock} style={{color: mostRecent == "-createdAt" ? "#FF8A33" : "#828689"}} onPress={sortByMostRecents} size={24} />
       </View>
     </View>
   );
@@ -66,6 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: 80,
-  },
+  }
 });
 export default AppFilter;

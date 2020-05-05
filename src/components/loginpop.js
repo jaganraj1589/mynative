@@ -11,6 +11,7 @@ import {Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {userLogin, userRequest} from '../services/users';
 import {saveSession, getSession} from '../services/storage';
+import Loader from '../utils/loader';
 
 const LoginPopUp = ({setLogin, loadFeeds}) => {
   const [email, setEmail] = useState('');
@@ -18,16 +19,19 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
   const [emailErr, setEmailErr] = useState('');
   const [requestEmailErr, setRequestEmailErr] = useState('');
   const [apply, setApply] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const validateIsEmail = email => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
   };
   const userLogins = () => {
+    setLoading(true);
     userLogin({
       email: email,
       userType: 'listner',
     })
       .then(response => {
+        setLoading(false);
         if (response.data && response.data.error) {
           setEmailErr(response.data.message);
         } else {
@@ -44,6 +48,7 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
         }
       })
       .catch(({response}) => {
+        setLoading(false);
         console.info(response);
       });
   };
@@ -58,10 +63,12 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
   };
 
   const userRequests = () => {
+    setLoading(true);
     userRequest({
       email: requestEmail,
     })
       .then(response => {
+        setLoading(false);
         if (response.data && response.data.error) {
           setRequestEmailErr(response.data.message);
         } else {
@@ -69,6 +76,7 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
         }
       })
       .catch(({response}) => {
+        setLoading(false);
         console.info(response);
       });
   };
@@ -94,6 +102,8 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
     <View>
       <Modal animationType="fade" transparent>
         <View style={styles.modalPopup}>
+         <Loader
+          loading={loading} />
           <View style={styles.modalIn}>
             <Text style={styles.audioTitle}>Account Detail</Text>
             <View style={styles.inputs}>

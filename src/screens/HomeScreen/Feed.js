@@ -109,7 +109,7 @@ const Feed = ({feed}) => {
           <Text
             numberOfLines={1}
             style={{color: '#4a7da5'}}
-            onPress={() => Linking.openURL(feed.link)}>
+            onPress={() => { Linking.openURL(feed.link); }}>
             {feed.link}
           </Text>
         </View>
