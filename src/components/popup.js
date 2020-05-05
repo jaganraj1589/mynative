@@ -35,7 +35,7 @@ const RECORD_STATE = {
 
 const LIMIT = 60 * 1000;
 
-const PopUp = ({setRecord}) => {
+const PopUp = ({setRecord, records}) => {
   const [loading, setLoading] = useState(false);
   const [titleErr, setTitleErr] = useState('');
   const [linkErr, setLinkErr] = useState('');
@@ -254,71 +254,74 @@ const PopUp = ({setRecord}) => {
   }, [recorderState]);
 
   return (
-    <View>
-      <Modal animationType="fade" transparent>
-        <View style={styles.modalPopup}>
-        <Loader
-          loading={loading} />
-          <View style={styles.modalIn}>
-            <Text style={styles.audioTitle}>Your Speech</Text>
-            <Text style={styles.audioText}>{recorderState.state}</Text>
-            <Icon
-              name={recorderState.iconName}
-              size={50}
-              color={
-                recorderState.iconName === 'microphone-alt'
-                  ? '#eb3434'
-                  : recorderState.iconName === 'play'
-                  ? '#1eb750'
-                  : recorderState.iconName === 'stop'
-                  ? '#eb3434'
-                  : '#333'
-              }
-              onPress={handleRecord}
+    <Modal
+      isVisible={records}
+      animationIn={'slideInUp'}
+      animationOut={'slideOutDown'}
+      animationInTiming={300}
+      animationOutTiming={300}
+      backdropTransitionInTiming={1200}
+      backdropTransitionOutTiming={1200}
+      onBackdropPress={e => setRecord(false)}
+      style={styles.modalPopup}>
+      <View style={{flex: 1, justifyContent: 'flex-end', width: '100%'}}>
+        <View style={styles.modalIn}>
+          <Text style={styles.audioTitle}>Your Speech</Text>
+          <Text style={styles.audioText}>{recorderState.state}</Text>
+          <Icon
+            name={recorderState.iconName}
+            size={50}
+            color={
+              recorderState.iconName === 'microphone-alt'
+                ? '#eb3434'
+                : recorderState.iconName === 'play'
+                ? '#1eb750'
+                : recorderState.iconName === 'stop'
+                ? '#eb3434'
+                : '#333'
+            }
+            onPress={handleRecord}
+          />
+          <Text style={styles.audioText}>{recording.recordTime}</Text>
+          <View style={styles.inputs}>
+            <Input
+              placeholder="Speech title"
+              errorStyle={{color: 'red'}}
+              errorMessage={titleErr}
+              onChangeText={e => setTitle(e)}
             />
-            <Text style={styles.audioText}>{recording.recordTime}</Text>
-            <View style={styles.inputs}>
-              <Input
-                placeholder="Speech title(Max.50)"
-                errorStyle={{color: 'red'}}
-                errorMessage={titleErr}
-                onChangeText={e => setTitle(e)}
-              />
-              <Input
-                placeholder="Speech language"
-                errorStyle={{color: 'red'}}
-                errorMessage={langErr}
-                onChangeText={e => {
-                  setAudioText(e);
-                }}
-              />
-              <Input
+            <Input
+              placeholder="Speech language"
+              errorStyle={{color: 'red'}}
+              errorMessage=""
+              onChangeText={e => {
+                setAudioText(e);
+              }}
+            />
+            <Input
                 placeholder="Speech link Ex.(http://google.com)"
                 errorStyle={{color: 'red'}}
                 errorMessage={linkErr}
                 onChangeText={e => setAudiolink(e)}
+            />
+            <View style={styles.buttons}>
+              <Button
+                type="solid"
+                buttonStyle={styles.button}
+                onPress={e => setRecord(false)}
+                icon={<MaterialIcons name="close" size={30} color="#9c9c9c" />}
               />
-              <View style={styles.buttons}>
-                <Button
-                  type="solid"
-                  buttonStyle={styles.button}
-                  onPress={e => setRecord(false)}
-                  icon={
-                    <MaterialIcons name="close" size={30} color="#9c9c9c" />
-                  }
-                />
-                <Button
-                  type="solid"
-                  buttonStyle={styles.button}
-                  icon={<MaterialIcons name="done" size={30} color="#0caf46" />}
-                  onPress={postFeed}
-                />
-              </View>
+              <Button
+                type="solid"
+                buttonStyle={styles.button}
+                icon={<MaterialIcons name="done" size={30} color="#0caf46" />}
+                onPress={postFeed}
+              />
             </View>
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 const {height, width} = Dimensions.get('window');
@@ -326,11 +329,13 @@ const styles = StyleSheet.create({
   modalPopup: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    marginRight: 0,
+    marginLeft: 0,
+    marginBottom: 0,
   },
   modalIn: {
     backgroundColor: '#fff',
-    paddingTop: 50,
+    paddingTop: 30,
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
@@ -338,7 +343,8 @@ const styles = StyleSheet.create({
     // height: height * 0.9,
     marginLeft: 'auto',
     marginRight: 'auto',
-    borderRadius: 5,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     alignItems: 'center',
   },
   inputContainer: {

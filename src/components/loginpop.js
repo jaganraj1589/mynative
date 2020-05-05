@@ -1,19 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Modal,
-  StyleSheet,
-  Dimensions,
-  Text,
-  AsyncStorage,
-} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, AsyncStorage} from 'react-native';
+import Modal from 'react-native-modal';
 import {Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {userLogin, userRequest} from '../services/users';
 import {saveSession, getSession} from '../services/storage';
 import Loader from '../utils/loader';
 
-const LoginPopUp = ({setLogin, loadFeeds}) => {
+const LoginPopUp = ({setLogin, login, loadFeeds}) => {
   const [email, setEmail] = useState('');
   const [requestEmail, setRequestEmail] = useState('');
   const [emailErr, setEmailErr] = useState('');
@@ -93,70 +87,40 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
   const loadUserData = async () => {
     const session = await getSession();
   };
-
+  const allInputs = () => {
+    setLogin(false);
+    setTimeout(() => {
+      setApply(false);
+    }, 200);
+  };
   useEffect(() => {
     loadUserData();
   }, [setLogin]);
 
   return (
-    <View>
-      <Modal animationType="fade" transparent>
-        <View style={styles.modalPopup}>
-         <Loader
-          loading={loading} />
-          <View style={styles.modalIn}>
-            <Text style={styles.audioTitle}>Account Detail</Text>
-            <View style={styles.inputs}>
-              {!apply ? (
-                <>
-                  <View style={styles.audioText}>
-                    <Text style={styles.audioTextin}>
-                      Please enter your email address if you want to be able to
-                      retrieve your information in case you change phone (audios
-                      you've liked, speakers you've followed)
-                    </Text>
-                  </View>
-                  <View style={styles.buttons}>
-                    <View style={{width: '70%'}}>
-                      <Input
-                        placeholder="Enter your Email id"
-                        leftIcon={<Icon name="email" size={24} color="#ccc" />}
-                        inputStyle={styles.inputss}
-                        errorStyle={{color: 'red'}}
-                        errorMessage={emailErr}
-                        onChangeText={e => setEmail(e)}
-                      />
-                    </View>
-                    <Button
-                      type="solid"
-                      title="Login"
-                      buttonStyle={styles.button}
-                      icon={<Icon name="done" size={20} color="#fff" />}
-                      onPress={validateUserLogin}
-                    />
-                  </View>
-                </>
-              ) : null}
-              <View style={styles.audioText}>
-                <Text style={styles.audioTextin}>
-                  Apply to become a verified speaker : for now, we only allow as
-                  verified speakers Instagram users who have a large enough
-                  number of followers. To apply for vetted speaker status,
-                  please enter your email address in the field here and then
-                  send that same email address for verification in a DM on
-                  Instagram to the account KRDS, we'll get back to you asap,
-                  thanks :)
-                </Text>
-                {apply ? null : (
-                  <Button
-                    title="Apply"
-                    type="solid"
-                    buttonStyle={styles.buttonApply}
-                    onPress={e => setApply(true)}
-                  />
-                )}
-              </View>
-              {apply ? (
+    <Modal
+      isVisible={login}
+      animationIn={'slideInUp'}
+      animationOut={'slideOutDown'}
+      animationInTiming={300}
+      animationOutTiming={300}
+      backdropTransitionInTiming={1200}
+      backdropTransitionOutTiming={1200}
+      onBackdropPress={e => setLogin(false)}
+      style={styles.modalPopup}>
+      <View style={{flex: 1, justifyContent: 'flex-end', width: '100%'}}>
+        <View style={styles.modalIn}>
+          <Text style={styles.audioTitle}>Account Detail</Text>
+          <View style={styles.inputs}>
+            {!apply ? (
+              <>
+                <View style={styles.audioText}>
+                  <Text style={styles.audioTextin}>
+                    Please enter your email address if you want to be able to
+                    retrieve your information in case you change phone (audios
+                    you've liked, speakers you've followed)
+                  </Text>
+                </View>
                 <View style={styles.buttons}>
                   <View style={{width: '70%'}}>
                     <Input
@@ -164,33 +128,72 @@ const LoginPopUp = ({setLogin, loadFeeds}) => {
                       leftIcon={<Icon name="email" size={24} color="#ccc" />}
                       inputStyle={styles.inputss}
                       errorStyle={{color: 'red'}}
-                      errorMessage={requestEmailErr}
-                      onChangeText={e => setRequestEmail(e)}
+                      errorMessage={emailErr}
+                      onChangeText={e => setEmail(e)}
                     />
                   </View>
                   <Button
                     type="solid"
-                    title="Apply"
+                    title="Login"
                     buttonStyle={styles.button}
                     icon={<Icon name="done" size={20} color="#fff" />}
-                    onPress={validateUserRequest}
+                    onPress={validateUserLogin}
                   />
                 </View>
-              ) : null}
-
-              <View style={styles.buttonsclose}>
+              </>
+            ) : null}
+            <View style={styles.audioText}>
+              <Text style={styles.audioTextin}>
+                Apply to become a verified speaker : for now, we only allow as
+                verified speakers Instagram users who have a large enough number
+                of followers. To apply for vetted speaker status, please enter
+                your email address in the field here and then send that same
+                email address for verification in a DM on Instagram to the
+                account KRDS, we'll get back to you asap, thanks :)
+              </Text>
+              {apply ? null : (
+                <Button
+                  title="Apply"
+                  type="solid"
+                  buttonStyle={styles.buttonApply}
+                  onPress={e => setApply(true)}
+                />
+              )}
+            </View>
+            {apply ? (
+              <View style={styles.buttons}>
+                <View style={{width: '70%'}}>
+                  <Input
+                    placeholder="Enter your Email id"
+                    leftIcon={<Icon name="email" size={24} color="#ccc" />}
+                    inputStyle={styles.inputss}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={requestEmailErr}
+                    onChangeText={e => setRequestEmail(e)}
+                  />
+                </View>
                 <Button
                   type="solid"
-                  buttonStyle={styles.clsbutton}
-                  onPress={e => setLogin(false)}
-                  icon={<Icon name="close" size={20} color="#9c9c9c" />}
+                  title="Apply"
+                  buttonStyle={styles.button}
+                  icon={<Icon name="done" size={20} color="#fff" />}
+                  onPress={validateUserRequest}
                 />
               </View>
+            ) : null}
+
+            <View style={styles.buttonsclose}>
+              <Button
+                type="solid"
+                buttonStyle={styles.clsbutton}
+                onPress={allInputs}
+                icon={<Icon name="close" size={20} color="#9c9c9c" />}
+              />
             </View>
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 const {height, width} = Dimensions.get('window');
@@ -198,18 +201,22 @@ const styles = StyleSheet.create({
   modalPopup: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    marginRight: 0,
+    marginLeft: 0,
+    marginBottom: 0,
   },
   modalIn: {
     backgroundColor: '#fff',
-    paddingTop: 50,
+    paddingTop: 30,
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
     width: '100%',
+    // height: height * 0.9,
     marginLeft: 'auto',
     marginRight: 'auto',
-    borderRadius: 5,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     alignItems: 'center',
   },
   inputContainer: {

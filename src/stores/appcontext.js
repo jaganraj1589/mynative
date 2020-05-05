@@ -11,8 +11,26 @@ export const AppProvider = ({children}) => {
     alert('sortLikes');
   };
 
+  const [userImage, setUserImage] = useState(true);
+  const [userProfile, setUserProfile] = useState(false);
+
+  const userDetails = () => {
+    setUserProfile(true);
+  };
+  const closeuserDetails = () => {
+    setUserProfile(false);
+  };
+
   return (
-    <AppContext.Provider value={{sortLikes, sortFollow}}>
+    <AppContext.Provider
+      value={{
+        sortLikes,
+        sortFollow,
+        userImage,
+        userDetails,
+        userProfile,
+        closeuserDetails,
+      }}>
       {children}
     </AppContext.Provider>
   );

@@ -4,13 +4,14 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPodcast} from '@fortawesome/free-solid-svg-icons';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import {Button} from 'react-native-elements';
+import {Button, Avatar} from 'react-native-elements';
+import {useAppContextValue} from '../stores/appcontext';
 
 const AppHeader = ({navigation, loadFeeds, showProfile, setLogin}) => {
   const toProfile = () => {
     navigation.navigate('profile');
   };
-
+  const {userImage, userDetails} = useAppContextValue();
   return (
     <LinearGradient
       style={styles.header}
@@ -36,6 +37,16 @@ const AppHeader = ({navigation, loadFeeds, showProfile, setLogin}) => {
           />
         </View>
       )}
+      {userImage ? (
+        <Avatar
+          rounded
+          onPress={userDetails}
+          source={{
+            uri:
+              'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+          }}
+        />
+      ) : null}
     </LinearGradient>
   );
 };
