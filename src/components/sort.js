@@ -7,22 +7,26 @@ import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAppContextValue} from '../stores/appcontext';
 
-const AppFilter = ({sortByMostRecent, sortByMostLiked}) => {
-  const [mostLiked, setMostLiked] = useState("likes");
-  const [mostRecent, setMostRecent] = useState("createdAt");
+const AppFilter = ({sortByMostRecent, sortByMostLiked, navigation}) => {
+  const [mostLiked, setMostLiked] = useState('likes');
+  const [mostRecent, setMostRecent] = useState('createdAt');
 
   const sortByMostRecents = async () => {
-    setMostRecent(mostRecent == "createdAt" ? "-createdAt" : "createdAt")
-  }
+    setMostRecent(mostRecent == 'createdAt' ? '-createdAt' : 'createdAt');
+  };
   const sortByMostLikes = async () => {
-    setMostLiked(mostLiked == "likes" ? "-likes" : "likes")
-  }
+    setMostLiked(mostLiked == 'likes' ? '-likes' : 'likes');
+  };
   useEffect(() => {
     sortByMostRecent(mostRecent);
   }, [mostRecent]);
   useEffect(() => {
     sortByMostLiked(mostLiked);
   }, [mostLiked]);
+  const toProfile = () => {
+    navigation.navigate('profile');
+  };
+  const {sortFollow, sortLikes} = useAppContextValue();
 
   return (
     <View style={styles.filter}>
@@ -36,8 +40,18 @@ const AppFilter = ({sortByMostRecent, sortByMostLiked}) => {
         {/* <FontAwesomeIcon icon={faFilter} color={'#828689'} size={24} /> */}
       </View>
       <View style={styles.sorting}>
-        <FontAwesomeIcon icon={faStar} style={{color: mostLiked == "-likes" ? "#FF8A33" : "#828689"}} onPress={sortByMostLikes} size={24} />
-        <FontAwesomeIcon icon={faClock} style={{color: mostRecent == "-createdAt" ? "#FF8A33" : "#828689"}} onPress={sortByMostRecents} size={24} />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={{color: mostLiked == '-likes' ? '#FF8A33' : '#828689'}}
+          onPress={sortByMostLikes}
+          size={24}
+        />
+        <FontAwesomeIcon
+          icon={faClock}
+          style={{color: mostRecent == '-createdAt' ? '#FF8A33' : '#828689'}}
+          onPress={sortByMostRecents}
+          size={24}
+        />
       </View>
     </View>
   );
@@ -73,6 +87,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: 80,
-  }
+  },
 });
 export default AppFilter;
