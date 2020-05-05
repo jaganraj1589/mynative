@@ -13,6 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import {AppProvider} from './src/stores/appcontext';
 
 const Stack = createStackNavigator();
 
@@ -27,9 +28,11 @@ const HomeStackNavigator = () => {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <HomeStackNavigator />
-    </NavigationContainer>
+    <AppProvider>
+      <NavigationContainer>
+        <HomeStackNavigator />
+      </NavigationContainer>
+    </AppProvider>
   );
 };
 
