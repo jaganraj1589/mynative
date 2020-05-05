@@ -83,6 +83,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 50,
   },
+  avatar: {
+    borderColor: '#fff',
+    borderWidth: 10,
+    width: 100,
+    height: 100,
+  },
   inputContainer: {
     width: 250,
   },

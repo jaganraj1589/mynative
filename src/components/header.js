@@ -39,7 +39,9 @@ const AppHeader = ({navigation, loadFeeds, showProfile, setLogin}) => {
       )}
       {userImage ? (
         <Avatar
+          containerStyle={styles.avatar}
           rounded
+          size="medium"
           onPress={userDetails}
           source={{
             uri:
@@ -84,6 +86,12 @@ const styles = StyleSheet.create({
     textShadowRadius: 5,
     fontWeight: 'bold',
     marginLeft: 5,
+  },
+  avatar: {
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderWidth: 3,
+    width: 45,
+    height: 45,
   },
   loginBtn: {
     color: '#fff',
