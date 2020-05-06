@@ -34,12 +34,8 @@ const UserDetail = () => {
             }}
           />
           <Text style={styles.userTitle}>{userDetailsState.userName}</Text>
-          <Text style={styles.followText}>
-            Insta {userDetailsState.userInstaFollowers} followers
-          </Text>
-          <Text style={styles.followText}>
-            In app {userDetailsState.userFollowers} followers
-          </Text>
+          <Text style={styles.followText}>Insta {userDetailsState.userInstaFollowers} follwers</Text>
+         {userDetailsState.userFollowers && <Text style={styles.followText}>In app {userDetailsState.userFollowers} follwers</Text> }
           <View style={styles.inputs}>
             <View style={styles.buttonsclose}>
               <Button
