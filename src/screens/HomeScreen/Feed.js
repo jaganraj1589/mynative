@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, AsyncStorage} from 'react';
 import {
   Text,
   View,
@@ -20,7 +20,7 @@ import {Icon} from 'react-native-elements';
 import {useAppContextValue} from '../../stores/appcontext';
 
 const Feed = ({feed}) => {
-  const {deleteList} = useAppContextValue();
+  const {deleteList, userDetailsState,deleteSpeakerFeed} = useAppContextValue();
   const [feedState, setFeedState] = useState({
     likes: feed.likes,
     isLiked: feed.isLiked,
@@ -183,9 +183,9 @@ const Feed = ({feed}) => {
             />
           </Animated.View>
         </View>
-        <TouchableOpacity style={styles.delete} onPress={deleteList}>
-          <Icon name="trash-2" type="feather" size={28} color="#555" />
-        </TouchableOpacity>
+       { userDetailsState.userId == feed.speakerId && <View style={styles.delete}>
+          <Icon name="trash-2" type="feather" size={28} color="#555"  onPress={e =>deleteList({isPressed:true, feedId: feed._id, speakerId:feed.speakerId})} />
+       </View> }
       </View>
     </View>
   );

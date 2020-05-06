@@ -51,11 +51,7 @@ const HomeScreen = ({navigation}) => {
   const recordOn = e => {
     setRecord(true);
   };
-  const {
-    userProfile,
-    changeUserPermission,
-    feedFilterState,
-  } = useAppContextValue();
+  const {userProfile, changeUserPermission, feedFilterState, canFeedReload} = useAppContextValue();
   const fetchAllFeeds = async () => {
     setFeedsListState(prevState => ({
       currentPage: 0,
@@ -108,12 +104,14 @@ const HomeScreen = ({navigation}) => {
       let name = await AsyncStorage.getItem('name');
       let instaFollowers = await AsyncStorage.getItem('instaFollowers');
       let appFollowers = await AsyncStorage.getItem('appFollowers');
+      let userId = await AsyncStorage.getItem('userId');
       await changeUserPermission(
         userType,
         profilePic,
         name,
         instaFollowers,
         appFollowers,
+        userId
       );
     }
   };
@@ -125,7 +123,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     loadFeeds();
-  }, [mostRecent, mostLiked, canRecord, feedFilterState]);
+  }, [mostRecent, mostLiked, canRecord, feedFilterState, canFeedReload]);
 
   return (
     <View style={styles.container}>

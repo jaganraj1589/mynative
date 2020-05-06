@@ -10,6 +10,14 @@ export const AppProvider = ({children}) => {
   const [userProfile, setUserProfile] = useState(false);
 
   const [deletePop, setDeletePop] = useState(false);
+  const [canFeedReload, setCanFeedReload] = useState(false);
+
+  
+  const [feedDeleteDetails, setFeedDeleteDetails] = useState({
+    id: null,
+    speakerId: null
+  });
+
 
   const [feedFilterState, setFeedFilterState] = useState({
     filter_by_contry: "",
@@ -17,11 +25,12 @@ export const AppProvider = ({children}) => {
   });
   
   const [userDetailsState, setUserDetailsState] = useState({
-    userProfilePic: '',
-    userFollowers: '',
-    userName: '',
-    userInstaFollowers: '',
-    loginUserType: '',
+    userProfilePic: null,
+    userFollowers: null,
+    userName: null,
+    userInstaFollowers: null,
+    loginUserType: null,
+    userId: null
   });
 
   const sortFollow = () => {
@@ -37,8 +46,8 @@ export const AppProvider = ({children}) => {
     name,
     instaFollowers,
     appFollowers,
+    userId
   ) => {
-    console.log('changeUserPermission');
     if (userType == 'speaker') {
       setUserDetailsState(prevState => ({
         ...prevState,
@@ -47,6 +56,7 @@ export const AppProvider = ({children}) => {
         userName: name,
         userInstaFollowers: instaFollowers,
         loginUserType: userType,
+        userId: userId
       }));
     }
   };
@@ -54,23 +64,31 @@ export const AppProvider = ({children}) => {
   const userDetails = () => {
     setUserProfile(true);
   };
+  const canFeedReloadFn = () => {
+    setCanFeedReload(!canFeedReload);
+  };
   const closeuserDetails = () => {
     setUserProfile(false);
   };
-  const deleteList = () => {
-    setDeletePop(true);
+  const deleteList = (data) => {
+    setDeletePop(data.isPressed);
+    setFeedDeleteDetails(prevState => ({
+      ...prevState,
+      id: data.feedId,
+      speakerId: data.speakerId
+    }));
   };
   const logout = () => {
-    console.log('logout');
     removeSession();
     closeuserDetails();
     setUserDetailsState(prevState => ({
       ...prevState,
-      userProfilePic: '',
-      userFollowers: '',
-      userName: '',
-      userInstaFollowers: '',
-      loginUserType: '',
+      userProfilePic: null,
+      userFollowers: null,
+      userName: null,
+      userInstaFollowers: null,
+      loginUserType: null,
+      userId:null
     }));
   }
 
@@ -101,7 +119,10 @@ export const AppProvider = ({children}) => {
         deletePop,
         deleteList,
         feedByLCFilter,
-        feedFilterState
+        feedFilterState,
+        feedDeleteDetails,
+        canFeedReloadFn,
+        canFeedReload
       }}>
       {children}
     </AppContext.Provider>

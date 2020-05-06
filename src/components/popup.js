@@ -25,6 +25,8 @@ import AudioRecorderPlayer, {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {addFeed} from '../services/feeds';
 import Loader from '../utils/loader';
+import {useAppContextValue} from '../stores/appcontext';
+import Toast from 'react-native-simple-toast';
 
 const RECORD_STATE = {
   START_RECORD: 'Start Record',
@@ -49,6 +51,7 @@ const PopUp = ({setRecord, records}) => {
   const [fileUri, setFileUri] = useState('');
   const [audioText, setAudioText] = useState('');
   const [audiolink, setAudiolink] = useState('');
+  const {canFeedReloadFn} = useAppContextValue();
 
   useEffect(() => {
     if (validUrlErr) postFeed();
@@ -227,11 +230,13 @@ const PopUp = ({setRecord, records}) => {
         .then(response => {
           setLoading(false);
           setRecord(false);
+          canFeedReloadFn();
         })
         .catch(e => {
-          setTitleErr("Something went wrong please try again!");
+          setTitleErr('Something went wrong please try again!');
           setLoading(false);
           console.log(e);
+          Toast.show('Something went wrong please try again!',10,Toast.LONG,Toast.TOP);
         });
     } else {
       setLoading(false);

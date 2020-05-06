@@ -1,5 +1,5 @@
 import { getAxios } from '../utils/axios';
-import { GET_FEEDS_URL, FEED_ACTION_URL, ADD_FEED_URL } from '../constants/urls';
+import { GET_FEEDS_URL, FEED_ACTION_URL, ADD_FEED_URL, FEED_DELETE_URL } from '../constants/urls';
 
 export const getFeeds = (payload) => {
 	return getAxios().post(GET_FEEDS_URL, payload);
@@ -27,4 +27,9 @@ export const addFeed = (formdata) => {
 	//   body: formdata,
 	//  };
 	// return fetch(ADD_FEED_URL, config);
+};
+
+export const feedDelete = (payload) => {
+	console.log(payload);
+	return getAxios().post(FEED_DELETE_URL, payload);
 };

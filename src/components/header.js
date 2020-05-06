@@ -14,7 +14,6 @@ const AppHeader = ({navigation, loadFeeds, showProfile, canRecord, setLogin}) =>
 
   const {userDetails, userDetailsState} = useAppContextValue();
   const onUserClick = () => {
-    console.log("onUserClick")
     setLogin(true)
   }
   return (

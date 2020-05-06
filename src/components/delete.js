@@ -7,9 +7,26 @@ import {userLogin, userRequest} from '../services/users';
 import {saveSession, getSession} from '../services/storage';
 import Loader from '../utils/loader';
 import {useAppContextValue} from '../stores/appcontext';
+import {feedDelete} from '../services/feeds';
 
-const DeletePopup = ({setLogin, login, loadFeeds}) => {
-  const {deletePop, setDeletePop} = useAppContextValue();
+const DeletePopup = () => {
+  const {deletePop, setDeletePop,feedDeleteDetails, canFeedReloadFn} = useAppContextValue();
+  const [loading, setLoading] = useState(false);
+
+   const deleteDelete = async () => {
+    setLoading(true);
+    feedDelete(feedDeleteDetails)
+      .then(async ({data}) => {
+        setDeletePop(false)
+        setLoading(false);
+        canFeedReloadFn();
+      })
+      .catch(response => {
+        setLoading(false);
+        console.error(response.body);
+      });
+  };
+
   return (
     <Modal
       isVisible={deletePop}
@@ -22,7 +39,7 @@ const DeletePopup = ({setLogin, login, loadFeeds}) => {
       onBackdropPress={e => setDeletePop(false)}
       style={styles.modalPopup}>
       <View style={{flex: 1, justifyContent: 'flex-end', width: '100%'}}>
-        {/* <Loader loading={loading} /> */}
+       <Loader loading={loading} />
         <View style={styles.modalIn}>
           <Text style={styles.audioTitle}>Delete List</Text>
           <View>
@@ -42,6 +59,7 @@ const DeletePopup = ({setLogin, login, loadFeeds}) => {
                 type="solid"
                 title="delete"
                 buttonStyle={styles.button}
+                onPress={deleteDelete}
                 icon={<Icon name="done" size={20} color="#fff" />}
               />
             </View>
