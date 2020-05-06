@@ -7,8 +7,8 @@ import {
   Linking,
   AsyncStorage,
 } from 'react-native';
-import {Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Button, Icon} from 'react-native-elements';
+// import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'react-native-axios';
 import {
   ScrollView,
@@ -51,7 +51,11 @@ const HomeScreen = ({navigation}) => {
   const recordOn = e => {
     setRecord(true);
   };
-  const {userProfile, changeUserPermission, feedFilterState} = useAppContextValue();
+  const {
+    userProfile,
+    changeUserPermission,
+    feedFilterState,
+  } = useAppContextValue();
   const fetchAllFeeds = async () => {
     setFeedsListState(prevState => ({
       currentPage: 0,
@@ -133,29 +137,49 @@ const HomeScreen = ({navigation}) => {
         canRecord
         setLogin={setLogin}
       />
-      {/* <ScrollView style={styles.feedContainer}> */}
-      <View style={styles.cardCover}>
-        <FlatList
-          data={feeds}
-          // data={feedsListState.feedListData}
-          keyExtractor={(item, index) => index}
-          // keyExtractor={item => item.id}
-          renderItem={({item}) => <Feed feed={item} />}
-          initialNumToRender={5}
-          onEndReachedThreshold={5}
-          // onScroll={() => {
-          //   this.handleLoadMore();
-          // }}
-        />
+      <View style={styles.feedContainer}>
+        <View style={styles.cardCover}>
+          {feeds && feeds.length > 0 ? (
+            <FlatList
+              data={feeds}
+              // data={feedsListState.feedListData}
+              keyExtractor={(item, index) => index}
+              // keyExtractor={item => item.id}
+              renderItem={({item}) => <Feed feed={item} />}
+              initialNumToRender={5}
+              onEndReachedThreshold={5}
+              // onScroll={() => {
+              //   this.handleLoadMore();
+              // }}
+            />
+          ) : (
+            <View
+              style={{
+                marginTop: 'auto',
+                marginBottom: 'auto',
+                alignSelf: 'center',
+                justifySelf: 'center',
+              }}>
+              <Text style={styles.nofeed}>Oops... No audio feeds </Text>
+              <Icon name="frown-open" type="font-awesome-5" size={52} color="#d63529" />
+            </View>
+          )}
+        </View>
       </View>
-      {/* </ScrollView> */}
       {canRecord && (
         <View style={styles.recording}>
           <Button
             type="solid"
             buttonStyle={styles.recordBtn}
             onPress={recordOn}
-            icon={<Icon name="microphone-alt" size={50} color="#fff" />}
+            icon={
+              <Icon
+                type="font-awesome-5"
+                name="microphone-alt"
+                size={50}
+                color="#fff"
+              />
+            }
           />
         </View>
       )}

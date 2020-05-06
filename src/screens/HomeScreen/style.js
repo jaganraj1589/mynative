@@ -116,6 +116,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  feedhead: {
+    fontSize: 18,
+    color: '#555',
+    paddingLeft: 10,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
   likes: {
     width: 100,
     alignItems: 'center',
@@ -166,6 +173,12 @@ const styles = StyleSheet.create({
     paddingTop: 3,
     borderRadius: 2,
     backgroundColor: '#fafafa',
+  },
+  nofeed: {
+    fontWeight: 'bold',
+    fontSize: 22,
+    color: '#333',
+    marginBottom: 20,
   },
 });
 export default styles;

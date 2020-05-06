@@ -42,13 +42,13 @@ const AppFilter = ({sortByMostRecent, sortByMostLiked, navigation}) => {
       <View style={styles.sorting}>
         <FontAwesomeIcon
           icon={faStar}
-          style={{color: mostLiked == '-likes' ? '#FF8A33' : '#828689'}}
+          style={{color: mostLiked == '-likes' ? '#d63529' : '#828689'}}
           onPress={sortByMostLikes}
           size={24}
         />
         <FontAwesomeIcon
           icon={faClock}
-          style={{color: mostRecent == '-createdAt' ? '#FF8A33' : '#828689'}}
+          style={{color: mostRecent == '-createdAt' ? '#d63529' : '#828689'}}
           onPress={sortByMostRecents}
           size={24}
         />

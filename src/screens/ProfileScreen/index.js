@@ -10,8 +10,8 @@ import {
   ScrollView,
 } from 'react-native';
 import AppHeader from '../../components/header';
-import {Button, CheckBox} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Button, CheckBox, Icon} from 'react-native-elements';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 import {useAppContextValue} from '../../stores/appcontext';
 
@@ -26,86 +26,107 @@ const ProfileScreen = ({navigation}) => {
 
   const {feedByLCFilter} = useAppContextValue();
 
-  const [countryList, setCountryList] = useState({country:[
-    {id:1, value:"india", isChecked: false}, {id:2, value:"france", isChecked: false}, 
-    {id:3, value:"singapore", isChecked: false}, {id:4, value:"honkong", isChecked: false}]});
+  const [countryList, setCountryList] = useState({
+    country: [
+      {id: 1, value: 'india', isChecked: false},
+      {id: 2, value: 'france', isChecked: false},
+      {id: 3, value: 'singapore', isChecked: false},
+      {id: 4, value: 'honkong', isChecked: false},
+    ],
+  });
 
-  const [languageList, setLanguageList] = useState({language:[
-    {id:1, value:"english", isChecked: false}, {id:2, value:"french", isChecked: false}, 
-    {id:3, value:"tamil", isChecked: false}, {id:4, value:"chinese", isChecked: false}]});
+  const [languageList, setLanguageList] = useState({
+    language: [
+      {id: 1, value: 'english', isChecked: false},
+      {id: 2, value: 'french', isChecked: false},
+      {id: 3, value: 'tamil', isChecked: false},
+      {id: 4, value: 'chinese', isChecked: false},
+    ],
+  });
 
-  const handleCountryCheck = (id) => {
+  const handleCountryCheck = id => {
     let contries = countryList.country;
     contries.forEach(a => {
-      if (a.id === id)
-        a.isChecked =  !a.isChecked;
-      });
-    setCountryList({country: contries})
-  }
-  const handleLanguageCheck = (id) => {
+      if (a.id === id) a.isChecked = !a.isChecked;
+    });
+    setCountryList({country: contries});
+  };
+  const handleLanguageCheck = id => {
     let lang = languageList.language;
     lang.forEach(a => {
-      if (a.id === id)
-        a.isChecked =  !a.isChecked;
-      });
-    setLanguageList({language: lang})
-  }
-
-const applyFilter = () => {
-  let lang = [];
-  let country = []
-  languageList.language.map(data => {
-    if (data.isChecked) lang.push(data.value)
-  });
-  countryList.country.map(data => {
-    if (data.isChecked) country.push(data.value)
-  });
-  if (lang.length || country.length) {
-    feedByLCFilter({
-      language: lang,
-      country: country
+      if (a.id === id) a.isChecked = !a.isChecked;
     });
-    toHome();
-  } else {
-    Toast.show('Please select atleast one filter.',3,Toast.LONG,Toast.TOP);
-  }
-}
-  useEffect(() => {
-  }, [countryList]);
+    setLanguageList({language: lang});
+  };
+
+  const applyFilter = () => {
+    let lang = [];
+    let country = [];
+    languageList.language.map(data => {
+      if (data.isChecked) lang.push(data.value);
+    });
+    countryList.country.map(data => {
+      if (data.isChecked) country.push(data.value);
+    });
+    if (lang.length || country.length) {
+      feedByLCFilter({
+        language: lang,
+        country: country,
+      });
+      toHome();
+    } else {
+      Toast.show('Please select atleast one filter.', 3, Toast.LONG, Toast.TOP);
+    }
+  };
+  useEffect(() => {}, [countryList]);
 
   return (
     <View>
       {/* <AppHeader navigation={navigation} /> */}
       <View style={styles.filterPage}>
-        <View>
+        <View style={{justifyContent: 'space-between', height: '100%'}}>
           <Text style={styles.audioTitle}>Filter</Text>
-          <View>
+          <View style={{marginTop: 0, flex: 1}}>
             <View>
               <Text style={styles.countryTitle}>Countries</Text>
-              <ScrollView style={{height: 180}}>
-             {countryList && countryList.country.map(checkbox => (
-                <CheckBox
-                  center
-                  key={checkbox.id}
-                  title={checkbox.value}
-                  onPress={() => handleCountryCheck(checkbox.id)}
-                 checked={checkbox.isChecked}
-                />
-              ))}
+              <ScrollView style={styles.filterheight}>
+                <View style={styles.checkboxlist}>
+                  {countryList &&
+                    countryList.country.map(checkbox => (
+                      <CheckBox
+                        key={checkbox.id}
+                        title={checkbox.value}
+                        containerStyle={{marginRight:0,}}
+                        iconType="ionicon"
+                        checkedColor="#d63529"
+                        checkedIcon="ios-checkbox-outline"
+                        uncheckedIcon="ios-square-outline"
+                        onPress={() => handleCountryCheck(checkbox.id)}
+                        checked={checkbox.isChecked}
+                      />
+                    ))}
+                </View>
               </ScrollView>
             </View>
             <View>
               <Text style={styles.countryTitle}>Language</Text>
-              <ScrollView style={{height: 180}}>
-                {languageList && languageList.language.map(checkbox => (
-                <CheckBox
-                  center
-                  key={checkbox.id}
-                  title={checkbox.value}
-                  onPress={() => handleLanguageCheck(checkbox.id)}
-                 checked={checkbox.isChecked}
-                />
-              ))}
+              <ScrollView style={styles.filterheight}>
+                <View style={styles.checkboxlist}>
+                  {languageList &&
+                    languageList.language.map(checkbox => (
+                      <CheckBox
+                        key={checkbox.id}
+                        title={checkbox.value}
+                        containerStyle={{marginRight:0,}}
+                        iconType="ionicon"
+                        checkedColor="#d63529"
+                        checkedIcon="ios-checkbox-outline"
+                        uncheckedIcon="ios-square-outline"
+                        onPress={() => handleLanguageCheck(checkbox.id)}
+                        checked={checkbox.isChecked}
+                      />
+                    ))}
+                </View>
               </ScrollView>
             </View>
           </View>
@@ -145,6 +166,14 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     borderColor: '#dedede',
     borderBottomWidth: 1,
+    marginTop: 0,
+  },
+  filterheight: {
+    height: height * 0.18,
+  },
+  checkboxlist: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   countryTitle: {
     marginBottom: 5,
@@ -185,6 +214,12 @@ const styles = StyleSheet.create({
   },
   inputss: {
     fontSize: 14,
+  },
+  inputs: {
+    marginBottom: 30,
+    alignSelf: 'baseline',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   button: {
     width: 100,
