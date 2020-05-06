@@ -51,7 +51,7 @@ const HomeScreen = ({navigation}) => {
   const recordOn = e => {
     setRecord(true);
   };
-  const {userProfile, changeUserPermission} = useAppContextValue();
+  const {userProfile, changeUserPermission, feedFilterState} = useAppContextValue();
   const fetchAllFeeds = async () => {
     setFeedsListState(prevState => ({
       currentPage: 0,
@@ -59,7 +59,7 @@ const HomeScreen = ({navigation}) => {
       feedListData: [],
     }));
     setLoading(true);
-    getFeeds()
+    getFeeds(feedFilterState)
       .then(async ({data: {data: feedData}}) => {
         let sortedByMostLike = await feedData.sort(dynamicSort(mostLiked));
         let sortedDataByDate = await sortedByMostLike.sort(
@@ -121,7 +121,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     loadFeeds();
-  }, [mostRecent, mostLiked, canRecord]);
+  }, [mostRecent, mostLiked, canRecord, feedFilterState]);
 
   return (
     <View style={styles.container}>

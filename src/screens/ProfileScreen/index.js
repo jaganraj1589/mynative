@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -12,6 +12,8 @@ import {
 import AppHeader from '../../components/header';
 import {Button, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Toast from 'react-native-simple-toast';
+import {useAppContextValue} from '../../stores/appcontext';
 
 const ProfileScreen = ({navigation}) => {
   const [country, setCountry] = useState(false);
@@ -21,6 +23,56 @@ const ProfileScreen = ({navigation}) => {
   const selecthandle = e => {
     country ? setCountry(false) : setCountry(true);
   };
+
+  const {feedByLCFilter} = useAppContextValue();
+
+  const [countryList, setCountryList] = useState({country:[
+    {id:1, value:"india", isChecked: false}, {id:2, value:"france", isChecked: false}, 
+    {id:3, value:"singapore", isChecked: false}, {id:4, value:"honkong", isChecked: false}]});
+
+  const [languageList, setLanguageList] = useState({language:[
+    {id:1, value:"english", isChecked: false}, {id:2, value:"french", isChecked: false}, 
+    {id:3, value:"tamil", isChecked: false}, {id:4, value:"chinese", isChecked: false}]});
+
+  const handleCountryCheck = (id) => {
+    let contries = countryList.country;
+    contries.forEach(a => {
+      if (a.id === id)
+        a.isChecked =  !a.isChecked;
+      });
+    setCountryList({country: contries})
+  }
+  const handleLanguageCheck = (id) => {
+    let lang = languageList.language;
+    lang.forEach(a => {
+      if (a.id === id)
+        a.isChecked =  !a.isChecked;
+      });
+    setLanguageList({language: lang})
+  }
+
+const applyFilter = () => {
+  let lang = [];
+  let country = []
+  languageList.language.map(data => {
+    if (data.isChecked) lang.push(data.value)
+  });
+  countryList.country.map(data => {
+    if (data.isChecked) country.push(data.value)
+  });
+  if (lang.length || country.length) {
+    feedByLCFilter({
+      language: lang,
+      country: country
+    });
+    toHome();
+  } else {
+    Toast.show('Please select atleast one filter.',3,Toast.LONG,Toast.TOP);
+  }
+}
+  useEffect(() => {
+  }, [countryList]);
+
   return (
     <View>
       {/* <AppHeader navigation={navigation} /> */}
@@ -31,23 +83,29 @@ const ProfileScreen = ({navigation}) => {
             <View>
               <Text style={styles.countryTitle}>Countries</Text>
               <ScrollView style={{height: 180}}>
-                <CheckBox title="India" checked={country} />
-                <CheckBox title="France" checked={country} />
-                <CheckBox title="Singapore" checked={country} />
-                <CheckBox title="Honkong" checked={country} />
+             {countryList && countryList.country.map(checkbox => (
+                <CheckBox
+                  center
+                  key={checkbox.id}
+                  title={checkbox.value}
+                  onPress={() => handleCountryCheck(checkbox.id)}
+                 checked={checkbox.isChecked}
+                />
+              ))}
               </ScrollView>
             </View>
             <View>
               <Text style={styles.countryTitle}>Language</Text>
               <ScrollView style={{height: 180}}>
+                {languageList && languageList.language.map(checkbox => (
                 <CheckBox
-                  title="Tamil"
-                  checked={country}
-                  onPress={e => selecthandle(e)}
+                  center
+                  key={checkbox.id}
+                  title={checkbox.value}
+                  onPress={() => handleLanguageCheck(checkbox.id)}
+                 checked={checkbox.isChecked}
                 />
-                <CheckBox title="English" checked={country} />
-                <CheckBox title="French" checked={country} />
-                <CheckBox title="Chinese" checked={country} />
+              ))}
               </ScrollView>
             </View>
           </View>
@@ -63,6 +121,7 @@ const ProfileScreen = ({navigation}) => {
                 type="solid"
                 title="submit"
                 buttonStyle={styles.button}
+                onPress={applyFilter}
                 icon={<Icon name="done" size={20} color="#fff" />}
               />
             </View>

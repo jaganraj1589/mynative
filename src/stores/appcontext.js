@@ -8,8 +8,14 @@ export const AppProvider = ({children}) => {
   const [userImage, setUserImage] = useState(false);
   const [isSpeakerLoggedIn, setIsSpeakerLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState(false);
+
   const [deletePop, setDeletePop] = useState(false);
 
+  const [feedFilterState, setFeedFilterState] = useState({
+    filter_by_contry: "",
+    filter_by_lang: ""
+  });
+  
   const [userDetailsState, setUserDetailsState] = useState({
     userProfilePic: '',
     userFollowers: '',
@@ -66,6 +72,14 @@ export const AppProvider = ({children}) => {
       userInstaFollowers: '',
       loginUserType: '',
     }));
+  }
+
+  const feedByLCFilter = (data) => {
+    setFeedFilterState(prevState => ({
+      ...prevState,
+      filter_by_contry: data.country,
+      filter_by_lang: data.language
+    }));
   };
 
   useEffect(() => {}, [isSpeakerLoggedIn]);
@@ -86,6 +100,8 @@ export const AppProvider = ({children}) => {
         setDeletePop,
         deletePop,
         deleteList,
+        feedByLCFilter,
+        feedFilterState
       }}>
       {children}
     </AppContext.Provider>
