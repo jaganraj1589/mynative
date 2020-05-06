@@ -29,6 +29,7 @@ import {dynamicSort} from '../../utils/dynamicsort';
 
 import UserDetail from '../../components/userDetail';
 import {useAppContextValue} from '../../stores/appcontext';
+import DeletePopup from '../../components/delete';
 
 const image = {uri: 'https://reactjs.org/logo-og.png'};
 
@@ -103,10 +104,16 @@ const HomeScreen = ({navigation}) => {
       let name = await AsyncStorage.getItem('name');
       let instaFollowers = await AsyncStorage.getItem('instaFollowers');
       let appFollowers = await AsyncStorage.getItem('appFollowers');
-      await changeUserPermission(userType, profilePic, name, instaFollowers, appFollowers);
+      await changeUserPermission(
+        userType,
+        profilePic,
+        name,
+        instaFollowers,
+        appFollowers,
+      );
     }
   };
-  
+
   const loadFeeds = () => {
     fetchAllFeeds();
     canShowFeed();
@@ -155,7 +162,7 @@ const HomeScreen = ({navigation}) => {
       <LoginPopUp setLogin={setLogin} login={login} loadFeeds={loadFeeds} />
       <UserDetail />
       {record && <PopUp setRecord={setRecord} records={record} />}
-
+      <DeletePopup />
       {filter ? <Feedfilter setFilter={setFilter} /> : null}
       <AppFilter
         setFilter={setFilter}

@@ -1,58 +1,47 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, Dimensions, Text, AsyncStorage} from 'react-native';
 import Modal from 'react-native-modal';
-import {View, Text, StyleSheet, Dimensions, AsyncStorage} from 'react-native';
+import {Input, Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {userLogin, userRequest} from '../services/users';
+import {saveSession, getSession} from '../services/storage';
+import Loader from '../utils/loader';
 import {useAppContextValue} from '../stores/appcontext';
-import {Avatar, Icon, Button} from 'react-native-elements';
 
-const UserDetail = () => {
-  const {
-    userProfile,
-    closeuserDetails,
-    logout,
-    userDetailsState,
-  } = useAppContextValue();
-
+const DeletePopup = ({setLogin, login, loadFeeds}) => {
+  const {deletePop, setDeletePop} = useAppContextValue();
   return (
     <Modal
-      isVisible={userProfile}
+      isVisible={deletePop}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
       animationInTiming={300}
       animationOutTiming={300}
       backdropTransitionInTiming={1200}
       backdropTransitionOutTiming={1200}
-      onBackdropPress={closeuserDetails}
+      onBackdropPress={e => setDeletePop(false)}
       style={styles.modalPopup}>
       <View style={{flex: 1, justifyContent: 'flex-end', width: '100%'}}>
+        {/* <Loader loading={loading} /> */}
         <View style={styles.modalIn}>
-          <Text style={styles.popTitle}>Insta Profile details</Text>
-          <Avatar
-            rounded
-            size="xlarge"
-            source={{
-              uri: userDetailsState.userProfilePic,
-            }}
-          />
-          <Text style={styles.userTitle}>{userDetailsState.userName}</Text>
-          <Text style={styles.followText}>
-            Insta {userDetailsState.userInstaFollowers} followers
-          </Text>
-          <Text style={styles.followText}>
-            In app {userDetailsState.userFollowers} followers
-          </Text>
+          <Text style={styles.audioTitle}>Delete List</Text>
+          <View>
+            <Text style={{fontSize: 18, color: '#333'}}>
+              Are you sure to delete this list?
+            </Text>
+          </View>
           <View style={styles.inputs}>
             <View style={styles.buttonsclose}>
               <Button
                 type="solid"
                 buttonStyle={styles.clsbutton}
-                onPress={closeuserDetails}
+                onPress={e => setDeletePop(false)}
                 icon={<Icon name="close" size={20} color="#9c9c9c" />}
               />
               <Button
                 type="solid"
-                title="Logout"
+                title="delete"
                 buttonStyle={styles.button}
-                onPress={logout}
                 icon={<Icon name="done" size={20} color="#fff" />}
               />
             </View>
@@ -85,36 +74,29 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     alignItems: 'center',
   },
-  popTitle: {
+  inputContainer: {
+    width: 250,
+  },
+  audioTitle: {
     fontSize: 22,
     fontWeight: 'bold',
     color: '#eb3434',
     paddingBottom: 5,
     borderColor: '#dedede',
     borderBottomWidth: 1,
-    marginBottom: 50,
-  },
-  avatar: {
-    borderColor: '#fff',
-    borderWidth: 10,
-    width: 100,
-    height: 100,
-  },
-  inputContainer: {
-    width: 250,
-  },
-  userTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#353535',
     marginBottom: 10,
+  },
+  inputs: {
     marginTop: 10,
-  },
-  followText: {
-    fontSize: 16,
-    fontWeight: 'normal',
-    color: '#e45358',
     marginBottom: 10,
+    width: '100%',
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    width: '100%',
   },
   buttonsclose: {
     display: 'flex',
@@ -123,30 +105,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
   },
-  inputs: {
-    marginTop: 20,
-    marginBottom: 20,
-    width: '100%',
-  },
-  buttons: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    width: '100%',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  button: {
-    height: 40,
-    borderRadius: 2,
-    backgroundColor: '#d63529',
-    borderColor: '#d63529',
-    borderWidth: 2,
-    marginLeft: 20,
-  },
   inputss: {
     fontSize: 14,
     width: '100%',
+  },
+  button: {
+    backgroundColor: '#d63529',
+    marginLeft: 10,
+    width: 100,
+  },
+  buttonApply: {
+    backgroundColor: '#d63529',
+    marginTop: 10,
+    alignSelf: 'center',
   },
   clsbutton: {
     width: 40,
@@ -158,5 +129,4 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 });
-
-export default UserDetail;
+export default DeletePopup;

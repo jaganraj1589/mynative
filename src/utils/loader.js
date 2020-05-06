@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Modal, ActivityIndicator, Image} from 'react-native';
+import {BarIndicator} from 'react-native-indicators';
 
 const loaderImage = require('../../assets/images/loader.gif');
 const Loader = ({loading}) => {
@@ -14,7 +15,12 @@ const Loader = ({loading}) => {
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>
           {/* <ActivityIndicator color="#d63529" size="large" animating={loading} /> */}
-          <Image source={loaderImage} style={{width: 50, height: 17}} />
+          <BarIndicator
+            color="#d63529"
+            count={6}
+            size={30}
+            animationDuration={1000}
+          />
         </View>
       </View>
     </Modal>

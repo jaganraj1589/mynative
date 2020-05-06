@@ -1,6 +1,5 @@
 import React, {useState, useContext, useEffect, AsyncStorage} from 'react';
 import {removeSession} from '../services/storage';
-import RNRestart from 'react-native-restart'; 
 
 const AppContext = React.createContext();
 
@@ -9,13 +8,14 @@ export const AppProvider = ({children}) => {
   const [userImage, setUserImage] = useState(false);
   const [isSpeakerLoggedIn, setIsSpeakerLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState(false);
-  
+  const [deletePop, setDeletePop] = useState(false);
+
   const [userDetailsState, setUserDetailsState] = useState({
-    userProfilePic: "",
-    userFollowers: "",
-    userName:"",
-    userInstaFollowers:"",
-    loginUserType:""
+    userProfilePic: '',
+    userFollowers: '',
+    userName: '',
+    userInstaFollowers: '',
+    loginUserType: '',
   });
 
   const sortFollow = () => {
@@ -25,21 +25,25 @@ export const AppProvider = ({children}) => {
     alert('sortLikes');
   };
 
-  const changeUserPermission = async(userType, profilePic, name, instaFollowers, appFollowers) => {
-    console.log("changeUserPermission");
+  const changeUserPermission = async (
+    userType,
+    profilePic,
+    name,
+    instaFollowers,
+    appFollowers,
+  ) => {
+    console.log('changeUserPermission');
     if (userType == 'speaker') {
-        setUserDetailsState(prevState => ({
+      setUserDetailsState(prevState => ({
         ...prevState,
-        userProfilePic:profilePic,
-        userFollowers:appFollowers,
-        userName:name,
-        userInstaFollowers:instaFollowers,
-        loginUserType:userType
+        userProfilePic: profilePic,
+        userFollowers: appFollowers,
+        userName: name,
+        userInstaFollowers: instaFollowers,
+        loginUserType: userType,
       }));
     }
-  
-  }
-
+  };
 
   const userDetails = () => {
     setUserProfile(true);
@@ -47,23 +51,24 @@ export const AppProvider = ({children}) => {
   const closeuserDetails = () => {
     setUserProfile(false);
   };
+  const deleteList = () => {
+    setDeletePop(true);
+  };
   const logout = () => {
-    console.log("logout");    
+    console.log('logout');
     removeSession();
     closeuserDetails();
-     setUserDetailsState(prevState => ({
-        ...prevState,
-        userProfilePic:"",
-        userFollowers:"",
-        userName:"",
-        userInstaFollowers:"",
-        loginUserType:""
+    setUserDetailsState(prevState => ({
+      ...prevState,
+      userProfilePic: '',
+      userFollowers: '',
+      userName: '',
+      userInstaFollowers: '',
+      loginUserType: '',
     }));
-  }
+  };
 
-
-   useEffect(() => {
-  }, [isSpeakerLoggedIn]);
+  useEffect(() => {}, [isSpeakerLoggedIn]);
 
   return (
     <AppContext.Provider
@@ -78,6 +83,9 @@ export const AppProvider = ({children}) => {
         logout,
         changeUserPermission,
         userDetailsState,
+        setDeletePop,
+        deletePop,
+        deleteList,
       }}>
       {children}
     </AppContext.Provider>

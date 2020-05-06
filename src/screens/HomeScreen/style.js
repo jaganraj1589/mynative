@@ -125,6 +125,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#545454',
   },
+  delete: {
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   recordBtn: {
     width: 100,
     height: 100,

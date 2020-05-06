@@ -16,8 +16,11 @@ import styles from './style.js';
 import {feedAction} from '../../services/feeds';
 import {userAction} from '../../services/users';
 import {timeSince} from '../../utils/timesince';
+import {Icon} from 'react-native-elements';
+import {useAppContextValue} from '../../stores/appcontext';
 
 const Feed = ({feed}) => {
+  const {deleteList} = useAppContextValue();
   const [feedState, setFeedState] = useState({
     likes: feed.likes,
     isLiked: feed.isLiked,
@@ -180,6 +183,9 @@ const Feed = ({feed}) => {
             />
           </Animated.View>
         </View>
+        <TouchableOpacity style={styles.delete} onPress={deleteList}>
+          <Icon name="trash-2" type="feather" size={28} color="#555" />
+        </TouchableOpacity>
       </View>
     </View>
   );
