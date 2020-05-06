@@ -6,7 +6,7 @@ import {
   faPauseCircle,
 } from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faPlay, faPause} from '@fortawesome/free-solid-svg-icons';
+import {faPlay, faPause, faStop} from '@fortawesome/free-solid-svg-icons';
 import Player from './playeranimation';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {View} from 'react-native';
@@ -84,7 +84,7 @@ const AudioPlayer = ({uri, audioduration}) => {
           duration={audioduration}
           setDone={setDone}>
           <FontAwesomeIcon
-            icon={playerState.isPlaying ? faPause : faPlay}
+            icon={playerState.isPlaying ? faStop : faPlay}
             size={15}
             color={playerState.isPlaying ? '#eb3434' : '#ccc'}
           />
