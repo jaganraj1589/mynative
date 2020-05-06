@@ -14,7 +14,6 @@ const LoginPopUp = ({setLogin, login, loadFeeds}) => {
   const [requestEmailErr, setRequestEmailErr] = useState('');
   const [apply, setApply] = useState('');
   const [loading, setLoading] = useState(false);
-
   const validateIsEmail = email => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
   };
@@ -35,6 +34,10 @@ const LoginPopUp = ({setLogin, login, loadFeeds}) => {
               email: userinfo.email ? userinfo.email : '',
               userType: userinfo.userType ? userinfo.userType : '',
               userId: userinfo._id ? userinfo._id : '',
+              profilePic: userinfo.profile_pic ? userinfo.profile_pic : '',
+              name: userinfo.name ? userinfo.name : '',
+              instaFollowers: userinfo.insta_followers ? userinfo.insta_followers : '',
+              appFollowers: userinfo.followers ? userinfo.followers : '',
             });
           }
           setLogin(false);
@@ -109,6 +112,7 @@ const LoginPopUp = ({setLogin, login, loadFeeds}) => {
       onBackdropPress={e => setLogin(false)}
       style={styles.modalPopup}>
       <View style={{flex: 1, justifyContent: 'flex-end', width: '100%'}}>
+      <Loader loading={loading} />
         <View style={styles.modalIn}>
           <Text style={styles.audioTitle}>Account Detail</Text>
           <View style={styles.inputs}>

@@ -1,11 +1,12 @@
-import React from 'react';
+import React,  {useEffect, useState}  from 'react';
 import Modal from 'react-native-modal';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, AsyncStorage} from 'react-native';
 import {useAppContextValue} from '../stores/appcontext';
 import {Avatar, Icon, Button} from 'react-native-elements';
 
 const UserDetail = () => {
-  const {userProfile, closeuserDetails} = useAppContextValue();
+  const {userProfile, closeuserDetails, logout, userDetailsState} = useAppContextValue();
+
   return (
     <Modal
       isVisible={userProfile}
@@ -25,11 +26,12 @@ const UserDetail = () => {
             size="xlarge"
             source={{
               uri:
-                'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                userDetailsState.userProfilePic
             }}
           />
-          <Text style={styles.userTitle}>jagan1589</Text>
-          <Text style={styles.followText}>8 follwers</Text>
+          <Text style={styles.userTitle}>{userDetailsState.userName}</Text>
+          <Text style={styles.followText}>Insta {userDetailsState.userInstaFollowers} follwers</Text>
+          <Text style={styles.followText}>In app {userDetailsState.userFollowers} follwers</Text>
           <View style={styles.inputs}>
             <View style={styles.buttonsclose}>
               <Button
@@ -40,8 +42,9 @@ const UserDetail = () => {
               />
               <Button
                 type="solid"
-                title="Change account"
+                title="Logout"
                 buttonStyle={styles.button}
+                onPress={logout}
                 icon={<Icon name="done" size={20} color="#fff" />}
               />
             </View>

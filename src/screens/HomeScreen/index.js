@@ -39,8 +39,8 @@ const HomeScreen = ({navigation}) => {
   const [login, setLogin] = useState(false);
   const [filter, setFilter] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [mostLiked, setMostLiked] = useState('');
-  const [mostRecent, setMostRecent] = useState('');
+  const [mostLiked, setMostLiked] = useState('createdAt');
+  const [mostRecent, setMostRecent] = useState('likes');
 
   const [feedsListState, setFeedsListState] = useState({
     skip: 5,
@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}) => {
   const recordOn = e => {
     setRecord(true);
   };
-  const {userProfile} = useAppContextValue();
+  const {userProfile, changeUserPermission} = useAppContextValue();
   const fetchAllFeeds = async () => {
     setFeedsListState(prevState => ({
       currentPage: 0,
@@ -99,9 +99,14 @@ const HomeScreen = ({navigation}) => {
     const userType = await AsyncStorage.getItem('userType');
     if (userType === 'speaker') {
       setCanRecord(true);
+      let profilePic = await AsyncStorage.getItem('profilePic');
+      let name = await AsyncStorage.getItem('name');
+      let instaFollowers = await AsyncStorage.getItem('instaFollowers');
+      let appFollowers = await AsyncStorage.getItem('appFollowers');
+      await changeUserPermission(userType, profilePic, name, instaFollowers, appFollowers);
     }
   };
-
+  
   const loadFeeds = () => {
     fetchAllFeeds();
     canShowFeed();
@@ -109,7 +114,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     loadFeeds();
-  }, [mostRecent, mostLiked]);
+  }, [mostRecent, mostLiked, canRecord]);
 
   return (
     <View style={styles.container}>
@@ -118,6 +123,7 @@ const HomeScreen = ({navigation}) => {
         navigation={navigation}
         loadFeeds={loadFeeds}
         showProfile
+        canRecord
         setLogin={setLogin}
       />
       {/* <ScrollView style={styles.feedContainer}> */}

@@ -1,9 +1,23 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, AsyncStorage} from 'react';
+import {removeSession} from '../services/storage';
+import RNRestart from 'react-native-restart'; 
 
 const AppContext = React.createContext();
 
 export const AppProvider = ({children}) => {
   /** Get token value from local storage if exists */
+  const [userImage, setUserImage] = useState(false);
+  const [isSpeakerLoggedIn, setIsSpeakerLoggedIn] = useState(false);
+  const [userProfile, setUserProfile] = useState(false);
+  
+  const [userDetailsState, setUserDetailsState] = useState({
+    userProfilePic: "",
+    userFollowers: "",
+    userName:"",
+    userInstaFollowers:"",
+    loginUserType:""
+  });
+
   const sortFollow = () => {
     alert('sortFollow');
   };
@@ -11,8 +25,21 @@ export const AppProvider = ({children}) => {
     alert('sortLikes');
   };
 
-  const [userImage, setUserImage] = useState(true);
-  const [userProfile, setUserProfile] = useState(false);
+  const changeUserPermission = async(userType, profilePic, name, instaFollowers, appFollowers) => {
+    console.log("changeUserPermission");
+    if (userType == 'speaker') {
+        setUserDetailsState(prevState => ({
+        ...prevState,
+        userProfilePic:profilePic,
+        userFollowers:appFollowers,
+        userName:name,
+        userInstaFollowers:instaFollowers,
+        loginUserType:userType
+      }));
+    }
+  
+  }
+
 
   const userDetails = () => {
     setUserProfile(true);
@@ -20,6 +47,23 @@ export const AppProvider = ({children}) => {
   const closeuserDetails = () => {
     setUserProfile(false);
   };
+  const logout = () => {
+    console.log("logout");    
+    removeSession();
+    closeuserDetails();
+     setUserDetailsState(prevState => ({
+        ...prevState,
+        userProfilePic:"",
+        userFollowers:"",
+        userName:"",
+        userInstaFollowers:"",
+        loginUserType:""
+    }));
+  }
+
+
+   useEffect(() => {
+  }, [isSpeakerLoggedIn]);
 
   return (
     <AppContext.Provider
@@ -30,6 +74,10 @@ export const AppProvider = ({children}) => {
         userDetails,
         userProfile,
         closeuserDetails,
+        isSpeakerLoggedIn,
+        logout,
+        changeUserPermission,
+        userDetailsState,
       }}>
       {children}
     </AppContext.Provider>

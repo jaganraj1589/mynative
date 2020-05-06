@@ -265,6 +265,7 @@ const PopUp = ({setRecord, records}) => {
       onBackdropPress={e => setRecord(false)}
       style={styles.modalPopup}>
       <View style={{flex: 1, justifyContent: 'flex-end', width: '100%'}}>
+       <Loader loading={loading} />
         <View style={styles.modalIn}>
           <Text style={styles.audioTitle}>Your Speech</Text>
           <Text style={styles.audioText}>{recorderState.state}</Text>
@@ -293,7 +294,7 @@ const PopUp = ({setRecord, records}) => {
             <Input
               placeholder="Speech language"
               errorStyle={{color: 'red'}}
-              errorMessage=""
+              errorMessage={langErr}
               onChangeText={e => {
                 setAudioText(e);
               }}
