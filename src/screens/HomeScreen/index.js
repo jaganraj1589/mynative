@@ -52,6 +52,7 @@ const HomeScreen = ({navigation}) => {
     setRecord(true);
   };
   const {userProfile, changeUserPermission, feedFilterState, canFeedReload} = useAppContextValue();
+  
   const fetchAllFeeds = async () => {
     setFeedsListState(prevState => ({
       currentPage: 0,
@@ -75,19 +76,20 @@ const HomeScreen = ({navigation}) => {
       });
   };
   handleLoadMore = async () => {
-    //  console.log("handleLoadMore");
-    // let data = [];
-    // feeds.slice([feedsListState.currentPage], [feedsListState.skip]).map((item, i) => {
-    //   data.push(item);
-    // });
-    // if (data.length > 0) {
-    //   await setFeedsListState(prevState => ({
-    //     ...prevState,
-    //     currentPage: prevState.currentPage+5 ,
-    //     skip: prevState.skip + 5,
-    //     feedListData: [...prevState.feedListData, ...data]
-    //   }));
-    // }
+    setLoading(true);
+    let data = [];
+    feeds.slice([feedsListState.currentPage], [feedsListState.skip]).map((item, i) => {
+      data.push(item);
+    });
+    if (data.length > 0) {
+      await setFeedsListState(prevState => ({
+        ...prevState,
+        currentPage: prevState.currentPage+5 ,
+        skip: prevState.skip + 5,
+        feedListData: [...prevState.feedListData, ...data]
+      }));
+    }
+    setTimeout(function() {     setLoading(false); }, 5000);
   };
   const sortByMostRecent = async data => {
     setMostRecent(data);
@@ -139,16 +141,14 @@ const HomeScreen = ({navigation}) => {
         <View style={styles.cardCover}>
           {feeds && feeds.length > 0 ? (
             <FlatList
-              data={feeds}
-              // data={feedsListState.feedListData}
+             // data={feeds}
+              data={feedsListState.feedListData}
               keyExtractor={(item, index) => index}
               // keyExtractor={item => item.id}
               renderItem={({item}) => <Feed feed={item} />}
               initialNumToRender={5}
               onEndReachedThreshold={5}
-              // onScroll={() => {
-              //   this.handleLoadMore();
-              // }}
+              onScroll={handleLoadMore}
             />
           ) : (
             <View

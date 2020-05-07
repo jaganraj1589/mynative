@@ -8,11 +8,12 @@ import {
   PermissionsAndroid,
   Platform,
   AsyncStorage,
-  Linking
+  Linking,
+  ScrollView
 } from 'react-native';
 import fs from 'react-native-fs';
 
-import {Input, Button} from 'react-native-elements';
+import {Input, Button,CheckBox} from 'react-native-elements';
 import PlayBtn from './playbtn';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AudioRecorderPlayer, {
@@ -41,7 +42,6 @@ const PopUp = ({setRecord, records}) => {
   const [loading, setLoading] = useState(false);
   const [titleErr, setTitleErr] = useState('');
   const [linkErr, setLinkErr] = useState('');
-  const [langErr, setLangErr] = useState('');
   const [validUrlErr, setValidUrlErr] = useState(false);
   const path = Platform.select({
     ios: 'hello.m4a',
@@ -49,9 +49,16 @@ const PopUp = ({setRecord, records}) => {
   });
   const [title, setTitle] = useState('');
   const [fileUri, setFileUri] = useState('');
-  const [audioText, setAudioText] = useState('');
   const [audiolink, setAudiolink] = useState('');
   const {canFeedReloadFn} = useAppContextValue();
+  const [languageList, setLanguageList] = useState({
+    language: [
+      {id: 1, value: 'english', isChecked: false},
+      {id: 2, value: 'french', isChecked: false},
+      {id: 3, value: 'tamil', isChecked: false},
+      {id: 4, value: 'chinese', isChecked: false},
+    ],
+  });
 
   useEffect(() => {
     if (validUrlErr) postFeed();
@@ -209,41 +216,59 @@ const PopUp = ({setRecord, records}) => {
          }
      });
   }
+  const handleLanguageCheck = id => {
+    let lang = languageList.language;
+    lang.forEach(a => {
+      if (a.id === id) a.isChecked = !a.isChecked;
+    });
+    setLanguageList({language: lang});
+  };
   const postFeed = async () => {
     setLoading(true);
-    if (title && fileUri && audioText && audiolink && validUrlErr && !(title.length >51)) {
-      const formdata = new FormData();
-      formdata.append('speakerId', await AsyncStorage.getItem('userId'));
-      formdata.append('link', audiolink);
-      formdata.append('language', audioText);
-      formdata.append('title', title);
-      formdata.append(
-        'fileName',
-        Math.random()
-          .toString(36)
-          .replace(/[^a-z]+/g, '')
-          .substr(0, 5) + '.mp4',
-      );
-      const base64Audio = await fs.readFile(fileUri, 'base64');
-      formdata.append('audio', `data:audio/mp4;base64,${base64Audio}`);
-      addFeed(formdata)
-        .then(response => {
-          setLoading(false);
-          setRecord(false);
-          canFeedReloadFn();
-        })
-        .catch(e => {
-          setTitleErr('Something went wrong please try again!');
-          setLoading(false);
-          console.log(e);
-          Toast.show('Something went wrong please try again!',10,Toast.LONG,Toast.TOP);
-        });
+    let speakerId = await AsyncStorage.getItem('userId');
+    if (speakerId && speakerId != null) {
+      let lang = [];
+      languageList.language.map(data => {
+        if (data.isChecked) lang.push(data.value);
+      });
+      if (title && fileUri && lang.length && audiolink && validUrlErr && !(title.length >51)) {
+        console.log(lang);
+        const formdata = new FormData();
+        formdata.append('speakerId', await AsyncStorage.getItem('userId'));
+        formdata.append('link', audiolink);
+        formdata.append('language', lang.toString());
+        formdata.append('title', title);
+        formdata.append(
+          'fileName',
+          Math.random()
+            .toString(36)
+            .replace(/[^a-z]+/g, '')
+            .substr(0, 5) + '.mp4',
+        );
+        const base64Audio = await fs.readFile(fileUri, 'base64');
+        formdata.append('audio', `data:audio/mp4;base64,${base64Audio}`);
+        addFeed(formdata)
+          .then(response => {
+            setLoading(false);
+            setRecord(false);
+            canFeedReloadFn();
+          })
+          .catch(e => {
+            setTitleErr('Something went wrong please try again!');
+            setLoading(false);
+            console.log(e);
+            Toast.show('Something went wrong please try again!',10,Toast.LONG,Toast.TOP);
+          });
+      } else {
+        console.log(lang.length);
+        setLoading(false);
+        (!title || title.length >51) ? setTitleErr("Please enter the title(Max.50)") : setTitleErr("");
+        (!fileUri) ? setTitleErr("Please record your speech") : "";
+        !lang.length ? Toast.show('Please select Audio Language!',10,Toast.LONG,Toast.TOP) : ""
+        !audiolink ? setLinkErr("Please enter the link") : onShouldStartLoadWithRequest(audiolink);
+      }
     } else {
-      setLoading(false);
-      (!title || title.length >51) ? setTitleErr("Please enter the title(Max.50)") : setTitleErr("");
-      (!fileUri) ? setTitleErr("Please record your speech") : "";
-      !audioText ? setLangErr("Please enter the language") : setLangErr("");
-      !audiolink ? setLinkErr("Please enter the link") : onShouldStartLoadWithRequest(audiolink);
+      Toast.show('Something went wrong try after some time!',10,Toast.LONG,Toast.TOP)
     }
   };
 
@@ -296,14 +321,27 @@ const PopUp = ({setRecord, records}) => {
               errorMessage={titleErr}
               onChangeText={e => setTitle(e)}
             />
-            <Input
-              placeholder="Speech language"
-              errorStyle={{color: 'red'}}
-              errorMessage={langErr}
-              onChangeText={e => {
-                setAudioText(e);
-              }}
-            />
+              <View>
+              <Text style={styles.countryTitle}>Language</Text>
+              <ScrollView style={styles.filterheight}>
+                <View style={styles.checkboxlist}>
+                  {languageList &&
+                    languageList.language.map(checkbox => (
+                      <CheckBox
+                        key={checkbox.id}
+                        title={checkbox.value}
+                        containerStyle={{marginRight:0,}}
+                        iconType="ionicon"
+                        checkedColor="#d63529"
+                        checkedIcon="ios-checkbox-outline"
+                        uncheckedIcon="ios-square-outline"
+                        onPress={() => handleLanguageCheck(checkbox.id)}
+                        checked={checkbox.isChecked}
+                      />
+                    ))}
+                </View>
+              </ScrollView>
+            </View>
             <Input
                 placeholder="Speech link Ex.(http://google.com)"
                 errorStyle={{color: 'red'}}
@@ -396,5 +434,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     width: '100%',
   },
+   countryTitle: {
+    marginBottom: 5,
+    marginTop: 20,
+    width: '100%',
+    textAlign: 'left',
+    alignSelf: 'center',
+    // backgroundColor: '#e4e4e4',
+    padding: 5,
+    borderRadius: 5,
+    fontWeight: 'bold',
+  },
+    filterheight: {
+    height: height * 0.18,
+  },
+  checkboxlist: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  }
 });
 export default PopUp;

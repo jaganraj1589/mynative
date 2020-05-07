@@ -11,6 +11,8 @@ const UserDetail = () => {
     logout,
     userDetailsState,
   } = useAppContextValue();
+ const handleChoosePhoto = () => {
+  }
 
   return (
     <Modal
@@ -32,6 +34,8 @@ const UserDetail = () => {
             source={{
               uri: userDetailsState.userProfilePic,
             }}
+            showAccessory
+            onPress={handleChoosePhoto}
           />
           <Text style={styles.userTitle}>{userDetailsState.userName}</Text>
           <Text style={styles.followText}>Insta {userDetailsState.userInstaFollowers} follwers</Text>
@@ -46,7 +50,7 @@ const UserDetail = () => {
               />
               <Button
                 type="solid"
-                title="Logout"
+                title="Leave"
                 buttonStyle={styles.button}
                 onPress={logout}
                 icon={<Icon name="done" size={20} color="#fff" />}

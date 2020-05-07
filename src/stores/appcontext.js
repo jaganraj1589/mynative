@@ -20,8 +20,8 @@ export const AppProvider = ({children}) => {
 
 
   const [feedFilterState, setFeedFilterState] = useState({
-    filter_by_contry: "",
-    filter_by_lang: ""
+    filter_by_contry: null,
+    filter_by_lang: null
   });
   
   const [userDetailsState, setUserDetailsState] = useState({
@@ -31,6 +31,24 @@ export const AppProvider = ({children}) => {
     userInstaFollowers: null,
     loginUserType: null,
     userId: null
+  });
+
+
+  const [countryList, setCountryList] = useState({
+    country: [
+      {id: 1, value: 'india', isChecked: false},
+      {id: 2, value: 'france', isChecked: false},
+      {id: 3, value: 'singapore', isChecked: false},
+      {id: 4, value: 'honkong', isChecked: false},
+    ],
+  });
+  const [languageList, setLanguageList] = useState({
+    language: [
+      {id: 1, value: 'english', isChecked: false},
+      {id: 2, value: 'french', isChecked: false},
+      {id: 3, value: 'tamil', isChecked: false},
+      {id: 4, value: 'chinese', isChecked: false},
+    ],
   });
 
   const sortFollow = () => {
@@ -122,7 +140,11 @@ export const AppProvider = ({children}) => {
         feedFilterState,
         feedDeleteDetails,
         canFeedReloadFn,
-        canFeedReload
+        canFeedReload,
+        countryList,
+        setCountryList,
+        languageList,
+        setLanguageList
       }}>
       {children}
     </AppContext.Provider>

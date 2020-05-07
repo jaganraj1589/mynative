@@ -24,26 +24,7 @@ const ProfileScreen = ({navigation}) => {
     country ? setCountry(false) : setCountry(true);
   };
 
-  const {feedByLCFilter} = useAppContextValue();
-
-  const [countryList, setCountryList] = useState({
-    country: [
-      {id: 1, value: 'india', isChecked: false},
-      {id: 2, value: 'france', isChecked: false},
-      {id: 3, value: 'singapore', isChecked: false},
-      {id: 4, value: 'honkong', isChecked: false},
-    ],
-  });
-
-  const [languageList, setLanguageList] = useState({
-    language: [
-      {id: 1, value: 'english', isChecked: false},
-      {id: 2, value: 'french', isChecked: false},
-      {id: 3, value: 'tamil', isChecked: false},
-      {id: 4, value: 'chinese', isChecked: false},
-    ],
-  });
-
+  const {feedByLCFilter, feedFilterState, countryList, setCountryList,languageList, setLanguageList} = useAppContextValue();
   const handleCountryCheck = id => {
     let contries = countryList.country;
     contries.forEach(a => {
@@ -68,15 +49,15 @@ const ProfileScreen = ({navigation}) => {
     countryList.country.map(data => {
       if (data.isChecked) country.push(data.value);
     });
-    if (lang.length || country.length) {
+    // if (lang.length || country.length) {
       feedByLCFilter({
         language: lang,
         country: country,
       });
       toHome();
-    } else {
-      Toast.show('Please select atleast one filter.', 3, Toast.LONG, Toast.TOP);
-    }
+    // } else {
+    //   Toast.show('Please select atleast one filter.', 3, Toast.LONG, Toast.TOP);
+    // }
   };
   useEffect(() => {}, [countryList]);
 

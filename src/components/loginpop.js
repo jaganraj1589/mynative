@@ -8,11 +8,11 @@ import {saveSession, getSession} from '../services/storage';
 import Loader from '../utils/loader';
 
 const LoginPopUp = ({setLogin, login, loadFeeds}) => {
-  const [email, setEmail] = useState('');
-  const [requestEmail, setRequestEmail] = useState('');
-  const [emailErr, setEmailErr] = useState('');
-  const [requestEmailErr, setRequestEmailErr] = useState('');
-  const [apply, setApply] = useState('');
+  const [email, setEmail] = useState(null);
+  const [requestEmail, setRequestEmail] = useState(null);
+  const [emailErr, setEmailErr] = useState(null);
+  const [requestEmailErr, setRequestEmailErr] = useState(null);
+  const [apply, setApply] = useState(null);
   const [loading, setLoading] = useState(false);
   const validateIsEmail = email => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
@@ -138,7 +138,7 @@ const LoginPopUp = ({setLogin, login, loadFeeds}) => {
                   </View>
                   <Button
                     type="solid"
-                    title="Login"
+                    title="Confirm"
                     buttonStyle={styles.button}
                     icon={<Icon name="done" size={20} color="#fff" />}
                     onPress={validateUserLogin}
